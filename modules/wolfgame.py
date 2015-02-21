@@ -6369,15 +6369,15 @@ def aftergame(cli, rawnick, chan, rest):
             for fn in COMMANDS[cmd]:
                 fn(cli, rawnick, botconfig.CHANNEL if fn.chan else nick, " ".join(rst))
     else:
-        cli.notice(nick, "That command was not found.")
+        cli.notice(nick, "Ordre desconeguda.")
         return
 
     if var.PHASE == "none":
         do_action()
         return
 
-    cli.msg(botconfig.CHANNEL, ("The command \02{0}\02 has been scheduled to run "+
-                  "after this game by \02{1}\02.").format(cmd, nick))
+    cli.msg(botconfig.CHANNEL, (u"L'ordre \02{0}\02 ha estat programada per executar-se "+
+                  u"després d'aquest joc per \02{1}\02.").format(cmd, nick))
     var.AFTER_FLASTGAME = do_action
 
 @cmd("fghost", admin_only=True, pm=True)
@@ -6399,16 +6399,16 @@ def flastgame(cli, nick, chan, rest):
     if var.PHASE != "join":
         if "join" in COMMANDS.keys():
             del COMMANDS["join"]
-            cmd("join")(lambda *spam: cli.msg(chan, "This command has been disabled by an admin."))
+            cmd("join")(lambda *spam: cli.msg(chan, "Aquesta ordre ha estat desactivada per un admin."))
             # manually recreate the command by calling the decorator function
         if "j" in COMMANDS.keys():
             del COMMANDS["j"]
-            cmd("j")(lambda *spam: cli.msg(chan, "This command has been disabled by an admin."))
+            cmd("j")(lambda *spam: cli.msg(chan, "Aquesta ordre ha estat desactivada per un admin."))
         if "start" in COMMANDS.keys():
             del COMMANDS["start"]
-            cmd("start")(lambda *spam: cli.msg(chan, "This command has been disabled by an admin."))
+            cmd("start")(lambda *spam: cli.msg(chan, "Aquesta ordre ha estat desactivada per un admin."))
 
-    cli.msg(chan, "Starting a new game has now been disabled by \02{0}\02.".format(nick))
+    cli.msg(chan, "Iniciar un nou joc ha estat desactivat per \02{0}\02.".format(nick))
     var.ADMIN_TO_PING = nick
 
     if rest.strip():
@@ -6420,14 +6420,14 @@ def game_stats(cli, nick, chan, rest):
     if (chan != nick and var.LAST_GSTATS and var.GSTATS_RATE_LIMIT and
             var.LAST_GSTATS + timedelta(seconds=var.GSTATS_RATE_LIMIT) >
             datetime.now()):
-        cli.notice(nick, ("This command is rate-limited. Please wait a while "
-                          "before using it again."))
+        cli.notice(nick, ("Aquesta ordre té límit de temps. Espera una estona "
+                          "abans de tornar-la a utilitzar."))
         return
 
     if chan != nick:
         var.LAST_GSTATS = datetime.now()
         if var.PHASE not in ('none', 'join'):
-            cli.notice(nick, "Wait until the game is over to view stats.")
+            cli.notice(nick, u"Espera a acabar el joc per veure les estadístiques.")
             return
 
     gamemode = var.CURRENT_GAMEMODE
@@ -6439,15 +6439,15 @@ def game_stats(cli, nick, chan, rest):
         if gamemode not in var.GAME_MODES.keys():
             gamemode, _ = complete_match(gamemode, var.GAME_MODES.keys())
         if not gamemode:
-            cli.notice(nick, "{0} is not a valid game mode".format(rest[0]))
+            cli.notice(nick, u"{0} no és un mode de joc vàlid".format(rest[0]))
             return
         rest.pop(0)
     # Check for invalid input
     if len(rest) and rest[0].isdigit():
         gamesize = int(rest[0])
         if gamesize > var.GAME_MODES[gamemode][2] or gamesize < var.GAME_MODES[gamemode][1]:
-            cli.notice(nick, "Please enter an integer between "+\
-                              "{0} and {1}.".format(var.GAME_MODES[gamemode][1], var.GAME_MODES[gamemode][2]))
+            cli.notice(nick, u"Si us plau, escriu un número entre "+\
+                              "{0} i {1}.".format(var.GAME_MODES[gamemode][1], var.GAME_MODES[gamemode][2]))
             return
 
     # List all games sizes and totals if no size is given
@@ -6469,14 +6469,14 @@ def player_stats(cli, nick, chan, rest):
     if (chan != nick and var.LAST_PSTATS and var.PSTATS_RATE_LIMIT and
             var.LAST_PSTATS + timedelta(seconds=var.PSTATS_RATE_LIMIT) >
             datetime.now()):
-        cli.notice(nick, ('This command is rate-limited. Please wait a while '
-                          'before using it again.'))
+        cli.notice(nick, ('Aquesta ordre és de temps limitat. Si us plau espera un estona '
+                          'abans de tornar-la a utilitzar.'))
         return
 
     if chan != nick:
         var.LAST_PSTATS = datetime.now()
         if var.PHASE not in ('none', 'join'):
-            cli.notice(nick, 'Wait until the game is over to view stats.')
+            cli.notice(nick, u'Espera a que s\'acabi el joc per veure les estadístiques.')
             return
 
     params = rest.split()
@@ -6494,9 +6494,9 @@ def player_stats(cli, nick, chan, rest):
         acc = lusers[luser]['account']
         if acc == '*':
             if luser == nick.lower():
-                cli.notice(nick, 'You are not logged in to NickServ.')
+                cli.notice(nick, u'No estas registrat al NickServ.')
             else:
-                cli.notice(nick, user + ' is not logged in to NickServ.')
+                cli.notice(nick, user + u' no està registrat amb el NickServ.')
 
             return
     else:
@@ -6531,25 +6531,25 @@ def game(cli, nick, chan, rest):
     else:
         gamemodes = ", ".join(["\002{}\002".format(gamemode) if len(var.list_players()) in range(var.GAME_MODES[gamemode][1], 
         var.GAME_MODES[gamemode][2]+1) else gamemode for gamemode in var.GAME_MODES.keys() if gamemode != "roles"])
-        cli.notice(nick, "No game mode specified. Available game modes: " + gamemodes)
+        cli.notice(nick, "No has especificat un mode de joc. Modes de joc disponibles: " + gamemodes)
         return
 
     if var.FGAMED:
-        cli.notice(nick, "A game mode has already been forced by an admin.")
+        cli.notice(nick, u"Un administrador ja ha forçat un mode de joc.")
         return
 
     if gamemode not in var.GAME_MODES.keys():
         match, _ = complete_match(gamemode, var.GAME_MODES.keys() - ["roles"])
         if not match:
-            cli.notice(nick, "\002{0}\002 is not a valid game mode.".format(gamemode))
+            cli.notice(nick, u"\002{0}\002 No és un mode de joc vàlid.".format(gamemode))
             return
         gamemode = match
     
     if gamemode != "roles":
         var.GAMEMODE_VOTES[cloak] = gamemode
-        cli.msg(chan, "\002{0}\002 votes for the \002{1}\002 game mode.".format(nick, gamemode))
+        cli.msg(chan, u"\002{0}\002 ha votat pel mode de joc \002{1}\002.".format(nick, gamemode))
     else:
-        cli.notice(nick, "You can't vote for that game mode.")
+        cli.notice(nick, u"No pots votar per aquest mode de joc.")
 
 def game_help(args=''):
     return "Votes to make a specific game mode more likely. Available game mode setters: " +\
@@ -6597,9 +6597,9 @@ def fpull(cli, nick, chan, rest):
             cause = "status"
 
         if chan == nick:
-            cli.msg(nick, "Process %s exited with %s %d" % (args, cause, ret))
+            cli.msg(nick, u"Procés %s finalitzat amb %s %d" % (args, cause, ret))
         else:
-            pm(cli, nick, "Process %s exited with %s %d" % (args, cause, ret))
+            pm(cli, nick, u"Procés %s finalitzat amb %s %d" % (args, cause, ret))
 
 @cmd("fsend", admin_only=True, pm=True)
 def fsend(cli, nick, chan, rest):
@@ -6610,7 +6610,7 @@ def _say(cli, raw_nick, rest, command, action=False):
     rest = rest.split(" ", 1)
 
     if len(rest) < 2:
-        pm(cli, nick, "Usage: {0}{1} <target> <message>".format(
+        pm(cli, nick, u"Utilització: {0}{1} <nick> <missatge>".format(
             botconfig.CMD_CHAR, command))
 
         return
@@ -6619,14 +6619,14 @@ def _say(cli, raw_nick, rest, command, action=False):
 
     if not is_admin(nick, cloak):
         if nick not in var.USERS:
-            pm(cli, nick, "You have to be in {0} to use this command.".format(
+            pm(cli, nick, u"Has d'estar a {0} per utilitzar aquesta ordre.".format(
                 botconfig.CHANNEL))
 
             return
 
         if rest[0] != botconfig.CHANNEL:
-            pm(cli, nick, ("You do not have permission to message this user "
-                           "or channel."))
+            pm(cli, nick, (u"No tens permís per enviar missatges a aquest nick "
+                           u"o canal."))
 
             return
 
@@ -6684,7 +6684,7 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
         pl = var.list_players()
 
         if nick not in pl and not is_admin(nick):
-            cli.notice(nick, "You're not currently playing.")
+            cli.notice(nick, u"No estas jugant.")
             return
 
         if rest:
@@ -6693,12 +6693,12 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
                 rest = rest.split()[0]
                 gamemode, _ = complete_match(rest, var.GAME_MODES.keys())
                 if not gamemode:
-                    cli.notice(nick, "\002{0}\002 is not a valid game mode.".format(rest))
+                    cli.notice(nick, u"\002{0}\002 no és un mode de joc vàlid.".format(rest))
                     return
 
             if cgamemode(cli, gamemode):
-                cli.msg(chan, ('\u0002{}\u0002 has changed the game settings '
-                                'successfully.').format(nick))
+                cli.msg(chan, (u'\u0002{}\u0002 ha canviat la configuració dels modes de joc '
+                                u'amb èxit.').format(nick))
                 var.FGAMED = True
         else:
             cli.notice(nick, fgame.__doc__())
@@ -6707,14 +6707,14 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
         args = args.strip()
 
         if not args:
-            return 'Available game mode setters: ' + ', '.join(var.GAME_MODES.keys())
+            return u'Configuradors de mode de joc disponibles: ' + ', '.join(var.GAME_MODES.keys())
         elif args in var.GAME_MODES.keys():
             if hasattr(var.GAME_MODES[args][0], "__doc__"):
                 return var.GAME_MODES[args][0].__doc__
             else:
-                return "Game mode {0} has no doc string".format(args)
+                return u"El mode de joc {0} no té un string 'doc'".format(args)
         else:
-            return 'Game mode setter \u0002{}\u0002 not found.'.format(args)
+            return u'No s\'ha trobat el configurador del mode de joc \u0002{}\u0002.'.format(args)
 
 
     fgame.__doc__ = fgame_help
@@ -6725,11 +6725,11 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
     def force(cli, nick, chan, rest):
         rst = re.split(" +",rest)
         if len(rst) < 2:
-            cli.msg(chan, "The syntax is incorrect.")
+            cli.msg(chan, "Sintaxi incorrecta.")
             return
         who = rst.pop(0).strip()
         if not who or who == botconfig.NICK:
-            cli.msg(chan, "That won't work.")
+            cli.msg(chan, u"Això no funcionarà.")
             return
         if who == "*":
             who = var.list_players()
@@ -6738,7 +6738,7 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
                 ul = list(var.USERS.keys())
                 ull = [u.lower() for u in ul]
                 if who.lower() not in ull:
-                    cli.msg(chan, "This can only be done on players in the channel or fake nicks.")
+                    cli.msg(chan, u"Només es pot fer als jugadors que estiguin al canal o en un nick fals.")
                     return
                 else:
                     who = [ul[ull.index(who.lower())]]
@@ -6751,23 +6751,23 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
                     continue
                 if fn.admin_only and nick in var.USERS and not is_admin(nick):
                     # Not a full admin
-                    cli.notice(nick, "Only full admins can force an admin-only command.")
+                    cli.notice(nick, u"Només els administradors poden forçar una ordre restringida.")
                     continue
                 for user in who:
                     if fn.chan:
                         fn(cli, user, chan, " ".join(rst))
                     else:
                         fn(cli, user, user, " ".join(rst))
-            cli.msg(chan, "Operation successful.")
+            cli.msg(chan, u"Operació completada amb èxit.")
         else:
-            cli.msg(chan, "That command was not found.")
+            cli.msg(chan, "Ordre desconeguda.")
 
 
     @cmd("rforce", admin_only=True)
     def rforce(cli, nick, chan, rest):
         rst = re.split(" +",rest)
         if len(rst) < 2:
-            cli.msg(chan, "The syntax is incorrect.")
+            cli.msg(chan, "Sintaxi incorrecta.")
             return
         who = rst.pop(0).strip().lower()
         who = who.replace("_", " ")
@@ -6790,16 +6790,16 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
                     continue
                 if fn.admin_only and nick in var.USERS and not is_admin(nick):
                     # Not a full admin
-                    cli.notice(nick, "Only full admins can force an admin-only command.")
+                    cli.notice(nick, u"Només els administradors poden forçar una ordre restringida.")
                     continue
                 for user in tgt[:]:
                     if fn.chan:
                         fn(cli, user, chan, " ".join(rst))
                     else:
                         fn(cli, user, user, " ".join(rst))
-            cli.msg(chan, "Operation successful.")
+            cli.msg(chan, u"Operació completada amb èxit.")
         else:
-            cli.msg(chan, "That command was not found.")
+            cli.msg(chan, "Ordre desconeguda.")
 
 
 
@@ -6807,7 +6807,7 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
     def frole(cli, nick, chan, rest):
         rst = re.split(" +",rest)
         if len(rst) < 2:
-            cli.msg(chan, "The syntax is incorrect.")
+            cli.msg(chan, "Sintaxi incorrecta.")
             return
         who = rst.pop(0).strip()
         rol = " ".join(rst).strip()
@@ -6815,8 +6815,8 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
         ull = [u.lower() for u in ul]
         if who.lower() not in ull:
             if not is_fake_nick(who):
-                cli.msg(chan, "Could not be done.")
-                cli.msg(chan, "The target needs to be in this channel or a fake name.")
+                cli.msg(chan, u"No fet.")
+                cli.msg(chan, u"El nick ha d'estar al canal.")
                 return
         if not is_fake_nick(who):
             who = ul[ull.index(who.lower())]
@@ -6849,10 +6849,10 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
                 if is_gunner and who in var.GUNNERS:
                     del var.GUNNERS[who]
             else:
-                cli.msg(chan, "Improper template modification.")
+                cli.msg(chan, u"Modificació de plantilla impròpia.")
                 return
         elif rol in var.TEMPLATE_RESTRICTIONS.keys():
-            cli.msg(chan, "Please specify \u0002+{0}\u0002 or \u0002-{0}\u0002 to add/remove this template.".format(rol))
+            cli.msg(chan, u"Si us plau, especifica \u0002+{0}\u0002 o \u0002-{0}\u0002 per afegir/suprimir aquesta plantilla.".format(rol))
             return
         elif rol in var.ROLES.keys():
             if who in pl:
@@ -6879,9 +6879,9 @@ if botconfig.DEBUG_MODE or botconfig.ALLOWED_NORMAL_MODE_COMMANDS:
                                 break
             var.ROLES[rol].append(who)
         else:
-            cli.msg(chan, "Not a valid role.")
+            cli.msg(chan, u"Rol invàlid.")
             return
-        cli.msg(chan, "Operation successful.")
+        cli.msg(chan, u"Operació amb èxit.")
         if var.PHASE not in ('none','join'):
             chk_win(cli)
 
