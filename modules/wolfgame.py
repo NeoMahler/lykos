@@ -5179,25 +5179,25 @@ def transition_night(cli):
             pl = ps[:]
             random.shuffle(pl)
             if mm in var.PLAYERS and not is_user_simple(mm):
-                pm(cli, mm, ('You are a \u0002matchmaker\u0002. You can select two players ' +
-                             'to be lovers with "choose <nick1> and <nick2>". If one lover ' +
-                             'dies, the other will as well. You may select yourself as one ' +
-                             'of the lovers. You may only select lovers during the first night.'))
+                pm(cli, mm, (u'Ets un \u0002matchmaker\u0002. Pots seleccionar dos jugadors ' +
+                             u'perquè s\'enamorin escrivint "choose <nick1> and <nick2>". Si un enamorat ' +
+                             u'mor, l\'altre també ho farà. També pots seleccioar-te a tu mateix ' +
+                             u'per estar enamorat. Només pots enamorar a dues persones durant la primera nit.'))
             else:
-                pm(cli, mm, "You are a \u0002matchmaker\u0002.")
-            pm(cli, mm, "Players: " + ", ".join(pl))
+                pm(cli, mm, "Ets un \u0002matchmaker\u0002.")
+            pm(cli, mm, "Jugadors: " + ", ".join(pl))
 
         for clone in var.ROLES["clone"]:
             pl = ps[:]
             random.shuffle(pl)
             pl.remove(clone)
             if clone in var.PLAYERS and not is_user_simple(clone):
-                pm(cli, clone, ('You are a \u0002clone\u0002. You can select someone to clone ' +
-                                'with "clone <nick>". If that player dies, you become their ' +
-                                'role(s). You may only clone someone during the first night.'))
+                pm(cli, clone, (u'Ets un \u0002clon\u0002. Pots seleccionar algú per clonar ' +
+                                u'escrivint "clone <nick>". Si aquest jugador mor tu adquireixes el seu rol. ' +
+                                u'Només pots clonar durant la primera nit.'))
             else:
-                pm(cli, clone, "You are a \u0002clone\u0002.")
-            pm(cli, clone, "Players: "+", ".join(pl))
+                pm(cli, clone, "Ets un \u0002clon\u0002.")
+            pm(cli, clone, "Jugadors: "+", ".join(pl))
 
         for minion in var.ROLES["minion"]:
             wolves = var.list_players(var.WOLF_ROLES)
