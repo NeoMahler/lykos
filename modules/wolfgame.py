@@ -5203,10 +5203,10 @@ def transition_night(cli):
             wolves = var.list_players(var.WOLF_ROLES)
             random.shuffle(wolves)
             if minion in var.PLAYERS and not is_user_simple(minion):
-                pm(cli, minion, "You are a \u0002minion\u0002. It is your job to help the wolves kill all of the villagers.")
+                pm(cli, minion, "Ets un \u0002minion\u0002. La teva feina és ajudar als llops a matar tots els habitants del poble.")
             else:
-                pm(cli, minion, "You are a \u0002minion\u0002.")
-            pm(cli, minion, "Wolves: " + ", ".join(wolves))
+                pm(cli, minion, "Ets un \u0002minion\u0002.")
+            pm(cli, minion, "Llops: " + ", ".join(wolves))
 
         villagers = copy.copy(var.ROLES["villager"])
         villagers += var.ROLES["time lord"] + var.ROLES["village elder"]
@@ -5214,18 +5214,18 @@ def transition_night(cli):
             villagers += var.ROLES["vengeful ghost"] + var.ROLES["amnesiac"]
         for villager in villagers:
             if villager in var.PLAYERS and not is_user_simple(villager):
-                pm(cli, villager, "You are a \u0002villager\u0002. It is your job to lynch all of the wolves.")
+                pm(cli, villager, u"Ets un \u0002vilatà\u0002. La teva feina és linxar tots els llops durant el dia.")
             else:
-                pm(cli, villager, "You are a \u0002villager\u0002.")
+                pm(cli, villager, u"Ets un\u0002vilatà\u0002.")
 
         cultists = copy.copy(var.ROLES["cultist"])
         if var.DEFAULT_ROLE == "cultist":
             cultists += var.ROLES["vengeful ghost"] + var.ROLES["amnesiac"]
         for cultist in cultists:
             if cultist in var.PLAYERS and not is_user_simple(cultist):
-                pm(cli, cultist, "You are a \u0002cultist\u0002. It is your job to help the wolves kill all of the villagers.")
+                pm(cli, cultist, u"Ets un \u0002cultist\u0002. La teva feina és ajudar als llops a matar tots els habitants del poble.")
             else:
-                pm(cli, cultist, "You are a \u0002cultist\u0002.")
+                pm(cli, cultist, u"Ets un \u0002cultist\u0002.")
 
     for g in var.GUNNERS.keys():
         if g not in ps:
@@ -5240,32 +5240,32 @@ def transition_night(cli):
             role = "sharpshooter"
         if norm_notify:
             if role == "gunner":
-                gun_msg = ('You are a \02{0}\02 and hold a gun that shoots special silver bullets. ' +
-                           'You may only use it during the day by typing "{0}shoot <nick>" in channel. '.format(botconfig.CMD_CHAR) +
-                           'Wolves and the crow will die instantly when shot, but anyone else will ' +
-                           'likely survive. You have {1}.')
+                gun_msg = (u'Ets un \02{0}\02 i tens un pistola que dispara bales de plata. ' +
+                           u'Només pots utilitzar-la durant el dia escrivint "{0}shoot <nick>" en el canal. '.format(botconfig.CMD_CHAR) +
+                           u'Els llops i el seu equip moriran instantàniament quan els disparis, però els altres ' +
+                           u'sobreviuran. Tens {1}.')
             elif role == "sharpshooter":
-                gun_msg = ('You are a \02{0}\02 and hold a gun that shoots special silver bullets. ' +
-                           'You may only use it during the day by typing "{0}shoot <nick>" in channel. '.format(botconfig.CMD_CHAR) +
-                           'Wolves and the crow will die instantly when shot, and anyone else will ' +
-                           'likely die as well due to your skill with the gun. You have {1}.')
+                gun_msg = (u'Ets un \02{0}\02 i tens una pistola que dispara bales de plata. ' +
+                           u'Només pots utilitzar-la durant el dia escrivint "{0}shoot <nick>" en el canal. '.format(botconfig.CMD_CHAR) +
+                           u'Els llops i el seu equip moriran instantàniament quan els disparis, i els altres ' +
+                           u'moriran depenent de la teva habilitat amb la pistola. Tens {1}.')
         else:
-            gun_msg = ("You are a \02{0}\02 and have a gun with {1}.")
+            gun_msg = (u"Ets un \02{0}\02 i tens una pistola amb {1}.")
         if var.GUNNERS[g] == 1:
-            gun_msg = gun_msg.format(role, "1 bullet")
+            gun_msg = gun_msg.format(role, "1 bala")
         elif var.GUNNERS[g] > 1:
-            gun_msg = gun_msg.format(role, str(var.GUNNERS[g]) + " bullets")
+            gun_msg = gun_msg.format(role, str(var.GUNNERS[g]) + " bales")
         else:
             continue
 
         pm(cli, g, gun_msg)
 
-    dmsg = (daydur_msg + "It is now nighttime. All players "+
-                   "check for PMs from me for instructions.")
+    dmsg = (daydur_msg + u"És de nit. Tots els jugadors han de comprovar "+
+                   "els meus missatge privats per instruccions.")
 
     if not var.FIRST_NIGHT:
-        dmsg = (dmsg + " If you did not receive one, simply sit back, "+
-                   "relax, and wait patiently for morning.")
+        dmsg = (dmsg + u" Si no n'has rebut cap, simplement seu tranquilament, "+
+                   u"relaxa't, i espera pacientment pel matí.")
     cli.msg(chan, dmsg)
     debuglog("BEGIN NIGHT")
 
@@ -5292,10 +5292,10 @@ def cgamemode(cli, arg):
             var.CURRENT_GAMEMODE = md
             return True
         except var.InvalidModeException as e:
-            cli.msg(botconfig.CHANNEL, "Invalid mode: "+str(e))
+            cli.msg(botconfig.CHANNEL, u"Mode invàlid: "+str(e))
             return False
     else:
-        cli.msg(chan, "Mode \u0002{0}\u0002 not found.".format(modeargs[0]))
+        cli.msg(chan, "Mode \u0002{0}\u0002 no trobat.".format(modeargs[0]))
 
 
 @cmd("start", join=True)
@@ -5307,8 +5307,8 @@ def start(cli, nick, chan, forced = False):
     if (not forced and var.LAST_START and nick in var.LAST_START and
             var.LAST_START[nick] + timedelta(seconds=var.START_RATE_LIMIT) >
             datetime.now()):
-        cli.notice(nick, ("This command is rate-limited. Please wait a while "
-                          "before using it again."))
+        cli.notice(nick, (u"Aquesta ordre té un límit de temps. Si us plau espera una estona "
+                          u"abans de tornar-lo a utilitzar."))
         return
 
     var.LAST_START[nick] = datetime.now()
@@ -5320,13 +5320,13 @@ def start(cli, nick, chan, forced = False):
     pl = villagers[:]
 
     if var.PHASE == "none":
-        cli.notice(nick, "No game is currently running.")
+        cli.notice(nick, u"No hi ha cap joc en procès.")
         return
     if var.PHASE != "join":
-        cli.notice(nick, "Werewolf is already in play.")
+        cli.notice(nick, u"El joc ja ha començat.")
         return
     if nick not in villagers and nick != chan and not forced:
-        cli.notice(nick, "You're currently not playing.")
+        cli.notice(nick, u"No estàs jugant.")
         return
 
     now = datetime.now()
@@ -5334,15 +5334,15 @@ def start(cli, nick, chan, forced = False):
     dur = int((var.CAN_START_TIME - now).total_seconds())
     if dur > 0 and not forced:
         plural = "" if dur == 1 else "s"
-        cli.msg(chan, "Please wait at least {0} more second{1}.".format(dur, plural))
+        cli.msg(chan, u"Si us plau, espera com a mínim {0} segon{1} més.".format(dur, plural))
         return
 
     if len(villagers) < var.MIN_PLAYERS:
-        cli.msg(chan, "{0}: \u0002{1}\u0002 or more players are required to play.".format(nick, var.MIN_PLAYERS))
+        cli.msg(chan, u"{0}: Es necessiten \u0002{1}\u0002 o més jugadors per jugar.".format(nick, var.MIN_PLAYERS))
         return
 
     if len(villagers) > var.MAX_PLAYERS:
-        cli.msg(chan, "{0}: At most \u0002{1}\u0002 players may play.".format(nick, var.MAX_PLAYERS))
+        cli.msg(chan, u"{0}: Com a màxim poden jugar \u0002{1}\u0002 jugadors.".format(nick, var.MAX_PLAYERS))
         return
 
     if not var.FGAMED:
@@ -5365,7 +5365,7 @@ def start(cli, nick, chan, forced = False):
             addroles = {k:v[index] for k,v in var.ROLE_GUIDE.items()}
             break
     else:
-        cli.msg(chan, "{0}: No game settings are defined for \u0002{1}\u0002 player games.".format(nick, len(villagers)))
+        cli.msg(chan, u"{0}: No hi ha una configuració de joc especificada per \u0002{1}\u0002 jugadors.".format(nick, len(villagers)))
         return
 
     # Cancel join timer
@@ -5377,27 +5377,27 @@ def start(cli, nick, chan, forced = False):
         while True:
             wvs = sum(addroles[r] for r in var.WOLFCHAT_ROLES)
             if len(villagers) < (sum(addroles.values()) - sum([addroles[r] for r in var.TEMPLATE_RESTRICTIONS.keys()])):
-                cli.msg(chan, "There are too few players in the "+
-                              "game to use the custom roles.")
+                cli.msg(chan, "No hi ha prous jugadors en el joc "+
+                              "per utilitzar rols personalitzats.")
             elif not wvs:
-                cli.msg(chan, "There has to be at least one wolf!")
+                cli.msg(chan, u"Hi ha d'haver com a mínim un llop!")
             elif wvs > (len(villagers) / 2):
-                cli.msg(chan, "Too many wolves.")
+                cli.msg(chan, "Masses llops.")
             else:
                 break
             reset_settings()
-            cli.msg(chan, "The default settings have been restored. Please !start again.")
+            cli.msg(chan, u"Configuració per defecte restaurada. Si us plau, !start de nou.")
             var.PHASE = "join"
             return
 
 
     if var.ADMIN_TO_PING:
         if "join" in COMMANDS.keys():
-            COMMANDS["join"] = [lambda *spam: cli.msg(chan, "This command has been disabled by an admin.")]
+            COMMANDS["join"] = [lambda *spam: cli.msg(chan, u"Ordre desactivada per un administrador.")]
         if "j" in COMMANDS.keys():
-            COMMANDS["j"] = [lambda *spam: cli.msg(chan, "This command has been disabled by an admin.")]
+            COMMANDS["j"] = [lambda *spam: cli.msg(chan, u"Ordre desactivada per un administrador.")]
         if "start" in COMMANDS.keys():
-            COMMANDS["start"] = [lambda *spam: cli.msg(chan, "This command has been disabled by an admin.")]
+            COMMANDS["start"] = [lambda *spam: cli.msg(chan, u"Ordre desactivada per un administrador.")]
 
     var.ALL_PLAYERS = copy.copy(var.ROLES["person"])
     var.ROLES = {}
@@ -5487,11 +5487,11 @@ def start(cli, nick, chan, forced = False):
             if var.ORIGINAL_SETTINGS:
                 var.ROLES = {"person": var.ALL_PLAYERS}
                 reset_settings()
-                cli.msg(chan, "The default settings have been restored. Please !start again.")
+                cli.msg(chan, u"La configuració per defecta ha estat restaurada. Si us plau, !start de nou.")
                 var.PHASE = "join"
                 return
             else:
-                cli.msg(chan, "This role has been skipped for this game.")
+                cli.msg(chan, u"Aquest rol ha estat saltat per aquest joc.")
                 var.ROLES[template] = []
                 continue
 
@@ -5522,8 +5522,8 @@ def start(cli, nick, chan, forced = False):
     if var.GOAT_HERDER:
        var.SPECIAL_ROLES["goat herder"] = [ nick ]
 
-    cli.msg(chan, ("{0}: Welcome to Werewolf, the popular detective/social party "+
-                   "game (a theme of Mafia). Using the \002{1}\002 game mode.").format(", ".join(pl), var.CURRENT_GAMEMODE))
+    cli.msg(chan, (u"{0}: Benvinguts a l'assassí, el popular joc social, també conegut com a 'Mafia'. "+
+                   u"Iniciant la partida amb el mode de joc \002{1}\002.").format(", ".join(pl), var.CURRENT_GAMEMODE))
     cli.mode(chan, "+m")
 
     var.ORIGINAL_ROLES = copy.deepcopy(var.ROLES)  # Make a copy
@@ -5625,15 +5625,15 @@ def fstasis(cli, nick, chan, rest):
             acc = None
         if not acc and user in var.STASISED_ACCS:
             acc = user
-        err_msg = "The amount of stasis has to be a non-negative integer."
+        err_msg = u"La quantitat d'èxtasi no pot ser negativa."
 
         if cloak:
             if len(data) == 1:
                 if cloak in var.STASISED:
                     plural = "" if var.STASISED[cloak] == 1 else "s"
-                    msg = "\u0002{0}\u0002 (Host: {1}) is in stasis for \u0002{2}\u0002 game{3}.".format(data[0], cloak, var.STASISED[cloak], plural)
+                    msg = u"\u0002{0}\u0002 (Host: {1}) està en èxtasi durant \u0002{2}\u0002 joc{3}.".format(data[0], cloak, var.STASISED[cloak], plural)
                 else:
-                    msg = "\u0002{0}\u0002 (Host: {1}) is not in stasis.".format(data[0], cloak)
+                    msg = u"\u0002{0}\u0002 (Host: {1}) no està en èxtasi.".format(data[0], cloak)
             else:
                 try:
                     amt = int(data[1])
@@ -5659,21 +5659,21 @@ def fstasis(cli, nick, chan, rest):
                     var.STASISED[cloak] = amt
                     var.set_stasis(cloak, amt)
                     plural = "" if amt == 1 else "s"
-                    msg = "\u0002{0}\u0002 (Host: {1}) is now in stasis for \u0002{2}\u0002 game{3}.".format(data[0], cloak, amt, plural)
+                    msg = u"\u0002{0}\u0002 (Host: {1}) està en èxtasi durant \u0002{2}\u0002 joc{3}.".format(data[0], cloak, amt, plural)
                 elif amt == 0:
                     if cloak in var.STASISED:
                         del var.STASISED[cloak]
                         var.set_stasis(cloak, 0)
-                        msg = "\u0002{0}\u0002 (Host: {1}) is no longer in stasis.".format(data[0], cloak)
+                        msg = u"\u0002{0}\u0002 (Host: {1}) ja no està en èxtasi.".format(data[0], cloak)
                     else:
-                        msg = "\u0002{0}\u0002 (Host: {1}) is not in stasis.".format(data[0], cloak)
+                        msg = u"\u0002{0}\u0002 (Host: {1}) no està en èxtasi.".format(data[0], cloak)
         if acc:
             if len(data) == 1:
                 if acc in var.STASISED_ACCS:
                     plural = "" if var.STASISED_ACCS[acc] == 1 else "s"
-                    msg = "\u0002{0}\u0002 (Account: {1}) is in stasis for \u0002{2}\u0002 game{3}.".format(data[0], acc, var.STASISED_ACCS[acc], plural)
+                    msg = u"\u0002{0}\u0002 (Compte: {1}) està en èxtasi \u0002{2}\u0002 game{3}.".format(data[0], acc, var.STASISED_ACCS[acc], plural)
                 else:
-                    msg = "\u0002{0}\u0002 (Account: {1}) is not in stasis.".format(data[0], acc)
+                    msg = u"\u0002{0}\u0002 (Compte: {1}) no està en èxasi.".format(data[0], acc)
             else:
                 try:
                     amt = int(data[1])
@@ -5697,14 +5697,14 @@ def fstasis(cli, nick, chan, rest):
                     var.STASISED_ACCS[acc] = amt
                     var.set_stasis_acc(acc, amt)
                     plural = "" if amt == 1 else "s"
-                    msg = "\u0002{0}\u0002 (Account: {1}) is now in stasis for \u0002{2}\u0002 game{3}.".format(data[0], acc, amt, plural)
+                    msg = "\u0002{0}\u0002 (Compte: {1}) està en èxtasis per \u0002{2}\u0002 joc{3}.".format(data[0], acc, amt, plural)
                 elif amt == 0:
                     if acc in var.STASISED_ACCS:
                         del var.STASISED_ACCS[acc]
                         var.set_stasis_acc(acc, 0)
-                        msg = "\u0002{0}\u0002 (Account: {1}) is no longer in stasis.".format(data[0], acc)
+                        msg = u"\u0002{0}\u0002 (Compte: {1}) ja no està en èxtasis.".format(data[0], acc)
                     else:
-                        msg = "\u0002{0}\u0002 (Account: {1}) is not in stasis.".format(data[0], acc)
+                        msg = u"\u0002{0}\u0002 (Compte: {1}) no està en èxtasis.".format(data[0], acc)
     elif var.STASISED or var.STASISED_ACCS:
         stasised = {}
         cloakstas = dict(var.STASISED)
@@ -5720,11 +5720,11 @@ def fstasis(cli, nick, chan, rest):
             stasised[oldcloak+" (Host)"] = cloakstas[oldcloak]
         for oldacc in accstas:
             stasised[oldacc+" (Account)"] = accstas[oldacc]
-        msg = "Currently stasised: {0}".format(", ".join(
+        msg = u"Nicks en èxtasi: {0}".format(", ".join(
             "\u0002{0}\u0002 ({1})".format(usr, number)
             for usr, number in stasised.items()))
     else:
-        msg = "Nobody is currently stasised."
+        msg = u"Ningú està en èxtasi."
 
     if msg:
         if data:
@@ -5948,11 +5948,11 @@ def wait(cli, nick, chan, rest):
         return
     if (var.LAST_WAIT and nick in var.LAST_WAIT and var.LAST_WAIT[nick] +
             timedelta(seconds=var.WAIT_RATE_LIMIT) > datetime.now()):
-        cli.notice(nick, ("This command is rate-limited. Please wait a while "
-                          "before using it again."))
+        cli.notice(nick, ("Aquesta ordre té límit de temps. Si us plau, espera una estona "
+                          "abans de tornar-lo a utilitzar."))
         return
     if var.WAITED >= var.MAXIMUM_WAITED:
-        cli.msg(chan, "Limit has already been reached for extending the wait time.")
+        cli.msg(chan, "S'ha assolit el temps d'espera màxim.")
         return
 
     now = datetime.now()
@@ -5962,8 +5962,8 @@ def wait(cli, nick, chan, rest):
     else:
         var.CAN_START_TIME += timedelta(seconds=var.EXTRA_WAIT)
     var.WAITED += 1
-    cli.msg(chan, ("\u0002{0}\u0002 increased the wait time by "+
-                  "{1} seconds.").format(nick, var.EXTRA_WAIT))
+    cli.msg(chan, ("\u0002{0}\u0002 ha augmentat el temps d'espera durant "+
+                  "{1} segons.").format(nick, var.EXTRA_WAIT))
 
 
 @cmd("fwait", admin_only=True, join=True)
@@ -5988,17 +5988,17 @@ def fwait(cli, nick, chan, rest):
 
     var.WAITED += 1
 
-    cli.msg(chan, ("\u0002{0}\u0002 forcibly {2}creased the wait time by {1} "
-                   "second{3}.").format(nick,
+    cli.msg(chan, (u"\u0002{0}\u0002 ha {2} augmentat el temps d'espera forçadament durant {1} "
+                   "segon{3}.").format(nick,
                                         abs(extra),
-                                        "in" if extra >= 0 else "de",
+                                        "augmentat" if extra >= 0 else u"disminuït",
                                         "s" if extra != 1 else ""))
 
 
 @cmd("fstop", admin_only=True, game=True, join=True)
 def reset_game(cli, nick, chan, rest):
     """Forces the game to stop."""
-    cli.msg(botconfig.CHANNEL, "\u0002{0}\u0002 has forced the game to stop.".format(nick))
+    cli.msg(botconfig.CHANNEL, u"\u0002{0}\u0002 ha aturat el joc forçadament.".format(nick))
     if var.PHASE != "join":
         stop_game(cli)
     else:
@@ -6044,14 +6044,14 @@ def get_help(cli, rnick, chan, rest):
                 if got:
                     return
                 elif chan == nick:
-                    pm(cli, nick, "Documentation for this command is not available.")
+                    pm(cli, nick, u"L'ajuda per aquesta ordre no està disponible.")
                 else:
-                    cli.notice(nick, "Documentation for this command is not available.")
+                    cli.notice(nick, u"L'ajuda per aquesta ordre no està disponible.")
 
         elif chan == nick:
-            pm(cli, nick, "Command not found.")
+            pm(cli, nick, "Ordre desconeguda.")
         else:
-            cli.notice(nick, "Command not found.")
+            cli.notice(nick, "Ordre desconeguda.")
         return
 
     # if command was not found, or if no command was given:
@@ -6069,15 +6069,15 @@ def get_help(cli, rnick, chan, rest):
                 afns.append("\u0002"+name+"\u0002")
     fns.sort() # Output commands in alphabetical order
     if chan == nick:
-        pm(cli, nick, "Commands: "+", ".join(fns))
+        pm(cli, nick, "Ordres: "+", ".join(fns))
     else:
-        cli.notice(nick, "Commands: "+", ".join(fns))
+        cli.notice(nick, "Ordres: "+", ".join(fns))
     if afns:
         afns.sort()
         if chan == nick:
-            pm(cli, nick, "Admin Commands: "+", ".join(afns))
+            pm(cli, nick, "Ordres dels administradors: "+", ".join(afns))
         else:
-            cli.notice(nick, "Admin Commands: "+", ".join(afns))
+            cli.notice(nick, "Ordres dels administradors: "+", ".join(afns))
 
 @hook("invite")
 def on_invite(cli, raw_nick, something, chan):
@@ -6089,7 +6089,7 @@ def on_invite(cli, raw_nick, something, chan):
         cli.join(chan) # Allows the bot to be present in any channel
         debuglog(nick, "INVITE", chan, display=True)
     else:
-        pm(parse_nick(nick)[0], "You are not an admin.")
+        pm(parse_nick(nick)[0], "No ets un administrador.")
 
 @cmd("fpart", raw_nick=True, admin_only=True, pm=True)
 def fpart(cli, rnick, chan, rest):
@@ -6098,15 +6098,15 @@ def fpart(cli, rnick, chan, rest):
     if nick == chan:
         rest = rest.split()
         if not rest:
-            pm(cli, nick, "Usage: fpart <channel>")
+            pm(cli, nick, u"Utilització: fpart <canal>")
             return
         if rest[0] == botconfig.CHANNEL:
-            pm(cli, nick, "No, that won't be allowed.")
+            pm(cli, nick, u"No, això no està permés.")
             return
         chan = rest[0]
-        pm(cli, nick, "Leaving "+ chan)
+        pm(cli, nick, "Sortint del canal "+ chan)
     if chan == botconfig.CHANNEL:
-        cli.notice(nick, "No, that won't be allowed.")
+        cli.notice(nick, u"No, això no està permés.")
         return
     cli.part(chan)
 
@@ -6119,8 +6119,8 @@ def show_admins(cli, nick, chan, rest):
 
     if (chan != nick and var.LAST_ADMINS and var.LAST_ADMINS +
             timedelta(seconds=var.ADMINS_RATE_LIMIT) > datetime.now()):
-        cli.notice(nick, ("This command is rate-limited. Please wait a while "
-                          "before using it again."))
+        cli.notice(nick, (u"Aquesta ordre té límit de temps. Espera una estona "
+                          "abans de tornar-la a utilitzar."))
         return
 
     if chan != nick or (var.PHASE in ("day", "night") or nick in pl):
@@ -6146,7 +6146,7 @@ def show_admins(cli, nick, chan, rest):
 
         admins.sort(key=str.lower)
 
-        msg = "Available admins: " + ", ".join(admins)
+        msg = "Administradors disponibles: " + ", ".join(admins)
 
         if chan == nick:
             pm(cli, nick, msg)
@@ -6168,17 +6168,17 @@ def coin(cli, nick, chan, rest):
     """It's a bad idea to base any decisions on this command."""
 
     if var.PHASE in ("day", "night") and nick not in var.list_players():
-        cli.notice(nick, "You may not use this command right now.")
+        cli.notice(nick, "No pots utilitzar aquesta ordre ara.")
         return
 
-    cli.msg(chan, "\2{0}\2 tosses a coin into the air...".format(nick))
-    coin = random.choice(["heads", "tails"])
+    cli.msg(chan, u"\2{0}\2 llança una moneda a l'aire...".format(nick))
+    coin = random.choice(["de cara", "de creu
     specialty = random.randrange(0,10)
     if specialty == 0:
-        coin = "its side"
+        coin = "de costat"
     if specialty == 1:
         coin = botconfig.NICK
-    cmsg = "The coin lands on \2{0}\2.".format(coin)
+    cmsg = "La moneda cau \2{0}\2.".format(coin)
     cli.msg(chan, cmsg)
 
 @cmd("pony")
@@ -6186,12 +6186,12 @@ def pony(cli, nick, chan, rest):
     """For entertaining bronies."""
 
     if var.PHASE in ("day", "night") and nick not in var.list_players():
-        cli.notice(nick, "You may not use this command right now.")
+        cli.notice(nick, "No pots utilitzar aquesta ordre ara.")
         return
 
-    cli.msg(chan, "\2{0}\2 tosses a pony into the air...".format(nick))
-    pony = random.choice(["hoof", "plot"])
-    cmsg = "The pony lands on \2{0}\2.".format(pony)
+    cli.msg(chan, u"\2{0}\2 llança un poni a l'aire...".format(nick))
+    pony = random.choice(["costat", "quatre potes"])
+    cmsg = "El poni cau de \2{0}\2.".format(pony)
     cli.msg(chan, cmsg)
 
 @cmd("time", pm=True, game=True, join=True)
@@ -6200,8 +6200,8 @@ def timeleft(cli, nick, chan, rest):
 
     if (chan != nick and var.LAST_TIME and
             var.LAST_TIME + timedelta(seconds=var.TIME_RATE_LIMIT) > datetime.now()):
-        cli.notice(nick, ("This command is rate-limited. Please wait a while "
-                          "before using it again."))
+        cli.notice(nick, ("Ordre amb límit de temps. Espera una estona "
+                          "abans de tornar-la a utilitzar."))
         return
 
     if chan != nick:
@@ -6211,14 +6211,14 @@ def timeleft(cli, nick, chan, rest):
         t = var.TIMERS[var.PHASE]
         remaining = int((t[1] + t[2]) - time.time())
         if var.PHASE == "day":
-            what = "sunset"
+            what = "el Sol es pongui"
         elif var.PHASE == "night":
-            what = "sunrise"
+            what = "el Sol neixi"
         elif var.PHASE == "join":
-            what = "game is canceled"
-        msg = "There is \u0002{0[0]:0>2}:{0[1]:0>2}\u0002 remaining until {1}.".format(divmod(remaining, 60), what)
+            what = u"el joc sigui cancel·lat"
+        msg = u"Falten \u0002{0[0]:0>2}:{0[1]:0>2}\u0002 perquè {1}.".format(divmod(remaining, 60), what)
     else:
-        msg = "{0} timers are currently disabled.".format(var.PHASE.capitalize())
+        msg = u"{0} els cronòmetres estàn desactivats.".format(var.PHASE.capitalize())
 
     if nick == chan:
         pm(cli, nick, msg)
@@ -6243,9 +6243,9 @@ def listroles(cli, nick, chan, rest):
     rest = re.split(" +", rest.strip(), 1)
     #prepend player count if called without any arguments
     if not len(rest[0]) and pl > 0:
-        txt += " {0}: There {1} \u0002{2}\u0002 playing.".format(nick, "is" if pl == 1 else "are", pl)
+        txt += " {0}: Hi ha \u0002{2}\u0002 jugant.".format(nick, pl)
         if var.PHASE in ["night", "day"]:
-            txt += " Using the {0} game mode.".format(var.CURRENT_GAMEMODE)
+            txt += " Utilitzant el mode de joc {0}.".format(var.CURRENT_GAMEMODE)
 
     #read game mode to get roles for
     if len(rest[0]) and not rest[0].isdigit():
@@ -6260,7 +6260,7 @@ def listroles(cli, nick, chan, rest):
                 roleguide = getattr(mode, "ROLE_GUIDE")
             rest.pop(0)
         else:
-            txt += " {0}: {1} is not a valid game mode.".format(nick, rest[0])
+            txt += u" {0}: {1} no és un mode de joc vàlid.".format(nick, rest[0])
             rest = []
             roleindex = {}
 
@@ -6309,7 +6309,7 @@ def myrole(cli, nick, chan, rest):
 
     ps = var.list_players()
     if nick not in ps and nick not in var.VENGEFUL_GHOSTS.keys():
-        cli.notice(nick, "You're currently not playing.")
+        cli.notice(nick, "No estas jugant.")
         return
 
     role = var.get_role(nick)
@@ -6318,10 +6318,10 @@ def myrole(cli, nick, chan, rest):
     elif role == "vengeful ghost" and nick not in var.VENGEFUL_GHOSTS.keys():
         role = var.DEFAULT_ROLE
     an = "n" if role[0] in ("a", "e", "i", "o", "u") else ""
-    pm(cli, nick, "You are a{0} \02{1}{2}\02.".format(an, role, " assassin" if nick in var.ROLES["assassin"] and nick not in var.ROLES["amnesiac"] else ""))
+    pm(cli, nick, "Ets un{0} \02{1}{2}\02.".format(an, role, " assassin" if nick in var.ROLES["assassin"] and nick not in var.ROLES["amnesiac"] else ""))
 
     if role in var.TOTEM_ORDER and role != "crazed shaman" and var.PHASE == "night" and nick not in var.SHAMANS:
-        pm(cli, nick, "You have the \u0002{0}\u0002 totem.".format(var.TOTEMS[nick]))
+        pm(cli, nick, u"Tens el tòtem \u0002{0}\u0002.".format(var.TOTEMS[nick]))
 
     # Check for gun/bullets
     if nick not in ps:
@@ -6331,25 +6331,25 @@ def myrole(cli, nick, chan, rest):
         if nick in var.ROLES["sharpshooter"]:
             role = "sharpshooter"
         if var.GUNNERS[nick] == 1:
-            pm(cli, nick, "You are a {0} and have a \02gun\02 with {1} {2}.".format(role, var.GUNNERS[nick], "bullet"))
+            pm(cli, nick, "Ets un {0} i tens una \02pistola\02 amb {1} {2}.".format(role, var.GUNNERS[nick], "bala"))
         else:
-            pm(cli, nick, "You are a {0} and have a \02gun\02 with {1} {2}.".format(role, var.GUNNERS[nick], "bullets"))
+            pm(cli, nick, "Ets un {0} i tens una \02pistola\02 amb {1} {2}.".format(role, var.GUNNERS[nick], "bales"))
     elif nick in var.WOLF_GUNNERS and var.WOLF_GUNNERS[nick]:
         if var.WOLF_GUNNERS[nick] == 1:
-            pm(cli, nick, "You have a \02gun\02 with {0} {1}.".format(var.WOLF_GUNNERS[nick], "bullet"))
+            pm(cli, nick, "Tens una \02pitola\02 amb {0} {1}.".format(var.WOLF_GUNNERS[nick], "bala"))
         else:
-            pm(cli, nick, "You have a \02gun\02 with {0} {1}.".format(var.WOLF_GUNNERS[nick], "bullets"))
+            pm(cli, nick, "Tens una \02pistola\02 amb {0} {1}.".format(var.WOLF_GUNNERS[nick], "bales"))
 
     # Remind lovers of each other
     if nick in ps and nick in var.LOVERS:
-        message = "You are \02in love\02 with "
+        message = u"Estàs \02enamorat\02 amb "
         lovers = sorted(list(set(var.LOVERS[nick])))
         if len(lovers) == 1:
             message += lovers[0]
         elif len(lovers) == 2:
-            message += lovers[0] + " and " + lovers[1]
+            message += lovers[0] + " i " + lovers[1]
         else:
-            message += ", ".join(lovers[:-1]) + ", and " + lovers[-1]
+            message += ", ".join(lovers[:-1]) + ", i " + lovers[-1]
         message += "."
         pm(cli, nick, message)
 
@@ -6358,7 +6358,7 @@ def aftergame(cli, rawnick, chan, rest):
     """Schedule a command to be run after the current game."""
     nick = parse_nick(rawnick)[0]
     if not rest.strip():
-        cli.notice(nick, "Incorrect syntax for this command.")
+        cli.notice(nick, "Sintaxi incorrecta.")
         return
 
     rst = re.split(" +", rest)
