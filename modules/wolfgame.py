@@ -4377,17 +4377,17 @@ def bite_cmd(cli, nick, chan, rest):
 @cmd("pass", chan=False, pm=True, game=True, playing=True, roles=("hunter",))
 def pass_cmd(cli, nick, chan, rest):
     if var.PHASE != "night":
-        pm(cli, nick, "You may only pass at night.")
+        pm(cli, nick, u"Només pots passar durant la nit.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar poders especials.")
         return
 
     if nick in var.OTHER_KILLS.keys():
         del var.OTHER_KILLS[nick]
         var.HUNTERS.remove(nick)
 
-    pm(cli, nick, "You have decided to not kill anyone tonight.")
+    pm(cli, nick, u"Has decidit no matar a ningú aquesta nit.")
     if nick not in var.PASSED: # Prevents multiple entries
         var.PASSED.append(nick)
     debuglog("{0} ({1}) PASS".format(nick, var.get_role(nick)))
@@ -4396,10 +4396,10 @@ def pass_cmd(cli, nick, chan, rest):
 @cmd("choose", "match", chan=False, pm=True, game=True, playing=True, roles=("matchmaker",))
 def choose(cli, nick, chan, rest):
     if var.PHASE != "night" or not var.FIRST_NIGHT:
-        pm(cli, nick, "You may only choose lovers during the first night.")
+        pm(cli, nick, "Només pots triar enamorats durant la primera nit.")
         return
     if nick in var.MATCHMAKERS:
-        pm(cli, nick, "You have already chosen lovers.")
+        pm(cli, nick, "Ja has triat enamorats.")
         return
     # no var.SILENCED check for night 1 only roles; silence should only apply for the night after
     # but just in case, it also sucks if the one night you're allowed to act is when you are
@@ -4422,7 +4422,7 @@ def choose(cli, nick, chan, rest):
         return
 
     if victim == victim2:
-        pm(cli, nick, "You must choose two different people.")
+        pm(cli, nick, u"Has de triar dues persones diferents.")
         return
 
     var.MATCHMAKERS.append(nick)
@@ -4439,73 +4439,73 @@ def choose(cli, nick, chan, rest):
     else:
         var.LOVERS[victim2] = [victim]
         var.ORIGINAL_LOVERS[victim2] = [victim]
-    pm(cli, nick, "You have selected \u0002{0}\u0002 and \u0002{1}\u0002 to be lovers.".format(victim, victim2))
+    pm(cli, nick, u"Has seleccionat a \u0002{0}\u0002 i \u0002{1}\u0002 perquè s'enamorin".format(victim, victim2))
 
     if victim in var.PLAYERS and not is_user_simple(victim):
-        pm(cli, victim, ("You are \u0002in love\u0002 with {0}. If that player dies for any " +
-                         "reason, the pain will be too much for you to bear and you will " +
-                         "commit suicide.").format(victim2))
+        pm(cli, victim, (u"Estàs \u0002enamorat\u0002 de {0}. Si aquest jugador mor per qualsevol raó, " +
+                         u"el dolor que et causarà la seva pèrdua farà que et " +
+                         u"suïcidis.").format(victim2))
     else:
-        pm(cli, victim, "You are \u0002in love\u0002 with {0}.".format(victim2))
+        pm(cli, victim, u"Estàs \u0002enamorat\u0002 de {0}.".format(victim2))
 
     if victim2 in var.PLAYERS and not is_user_simple(victim2):
-        pm(cli, victim2, ("You are \u0002in love\u0002 with {0}. If that player dies for any " +
-                         "reason, the pain will be too much for you to bear and you will " +
-                         "commit suicide.").format(victim))
+        pm(cli, victim2, (u"Estàs \u0002enamorat\u0002 de {0}. Si aquest jugador mor per qualsevol raó, " +
+                         u"el dolor que et causarà la seva pèrdua farà que et " +
+                         u"suïcidis.").format(victim))
     else:
-        pm(cli, victim2, "You are \u0002in love\u0002 with {0}.".format(victim))
+        pm(cli, victim2, u"Estàs \u0002enamorat\u0002 de {0}.".format(victim))
 
-    debuglog("{0} ({1}) MATCH: {2} ({3}) + {4} ({5})".format(nick, var.get_role(nick), victim, var.get_role(victim), victim2, var.get_role(victim2)))
+    debuglog("{0} ({1}) ENAMORATS: {2} ({3}) + {4} ({5})".format(nick, var.get_role(nick), victim, var.get_role(victim), victim2, var.get_role(victim2)))
     chk_nightdone(cli)
 
 @cmd("target", chan=False, pm=True, game=True, playing=True, roles=("assassin",))
 def target(cli, nick, chan, rest):
     if var.PHASE != "night":
-        pm(cli, nick, "You may only target people at night.")
+        pm(cli, nick, u"Només pots escollir gent a la nit.")
         return
     if nick in var.TARGETED and var.TARGETED[nick] != None:
-        pm(cli, nick, "You have already chosen a target.")
+        pm(cli, nick, u"Ja has triat una víctima.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Estas silenciat i no pots utilitzar cap poder especial.")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0])
     if not victim:
         return
 
     if nick == victim:
-        pm(cli, nick, "You may not target yourself.")
+        pm(cli, nick, "No pots esollir-te a tu mateix")
         return
 
     victim = choose_target(nick, victim)
     # assassin is a template so it will never get swapped, so don't check for exchanges with it
     var.TARGETED[nick] = victim
-    pm(cli, nick, "You have selected \u0002{0}\u0002 as your target.".format(victim))
+    pm(cli, nick, u"Has triat a \u0002{0}\u0002 per ser la teva víctima.".format(victim))
 
-    debuglog("{0} ({1}-{2}) TARGET: {3} ({4})".format(nick, "-".join(var.get_templates(nick)), var.get_role(nick), victim, var.get_role(victim)))
+    debuglog(u"{0} ({1}-{2}) VÍCTIMA: {3} ({4})".format(nick, "-".join(var.get_templates(nick)), var.get_role(nick), victim, var.get_role(victim)))
     chk_nightdone(cli)
 
 @cmd("hex", chan=False, pm=True, game=True, playing=True, roles=("hag",))
 def hex(cli, nick, chan, rest):
     if var.PHASE != "night":
-        pm(cli, nick, "You may only hex at night.")
+        pm(cli, nick, u"Només pots maleïr durant la nit.")
         return
     if nick in var.HEXED:
-        pm(cli, nick, "You have already hexed someone tonight.")
+        pm(cli, nick, u"Ja has maleït algú aquesta nit.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar poder especials.")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0])
     if not victim:
         return
 
     if nick == victim:
-        pm(cli, nick, "You may not target yourself.")
+        pm(cli, nick, u"No pots automaleïr-te!")
         return
     if var.LASTHEXED.get(nick) == victim:
-        pm(cli, nick, ("You hexed \u0002{0}\u0002 last night. " +
-                       "You cannot hex the same person two nights in a row.").format(victim))
+        pm(cli, nick, (u"Ja vas maleïr a \u0002{0}\u0002 durant la nit passada. " +
+                       u"No pots maleïr a la mateix persona durant dues nits seguides.").format(victim))
         return
 
     victim = choose_target(nick, victim)
@@ -4513,24 +4513,24 @@ def hex(cli, nick, chan, rest):
         return
     vrole = var.get_role(victim)
     if vrole in var.WOLFCHAT_ROLES:
-        pm(cli, nick, "Hexing another wolf would be a waste.")
+        pm(cli, nick, u"Maleïr un altre llop seria un malgast.")
         return
 
     var.HEXED.append(nick)
     var.LASTHEXED[nick] = victim
     var.TOBESILENCED.append(victim)
-    pm(cli, nick, "You have cast a hex on \u0002{0}\u0002.".format(victim))
+    pm(cli, nick, "Maleeixes a \u0002{0}\u0002.".format(victim))
 
-    debuglog("{0} ({1}) HEX: {2} ({3})".format(nick, var.get_role(nick), victim, var.get_role(victim)))
+    debuglog("{0} ({1}) MALEFICI: {2} ({3})".format(nick, var.get_role(nick), victim, var.get_role(victim)))
     chk_nightdone(cli)
 
 @cmd("clone", chan=False, pm=True, game=True, playing=True, roles=("clone",))
 def clone(cli, nick, chan, rest):
     if var.PHASE != "night" or not var.FIRST_NIGHT:
-        pm(cli, nick, "You may only clone someone during the first night.")
+        pm(cli, nick, u"Només pots clonar durant la primera nit.")
         return
     if nick in var.CLONED.keys():
-        pm(cli, nick, "You have already chosen to clone someone.")
+        pm(cli, nick, u"Ja has clonat a algú.")
         return
     # no var.SILENCED check for night 1 only roles; silence should only apply for the night after
     # but just in case, it also sucks if the one night you're allowed to act is when you are
@@ -4541,13 +4541,13 @@ def clone(cli, nick, chan, rest):
         return
 
     if nick == victim:
-        pm(cli, nick, "You may not target yourself.")
+        pm(cli, nick, "No pots clonar-te a tu mateix.")
         return
 
     var.CLONED[nick] = victim
-    pm(cli, nick, "You have chosen to clone \u0002{0}\u0002.".format(victim))
+    pm(cli, nick, "Has clonat a \u0002{0}\u0002.".format(victim))
 
-    debuglog("{0} ({1}) CLONE: {2} ({3})".format(nick, var.get_role(nick), victim, var.get_role(victim)))
+    debuglog("{0} ({1}) CLON: {2} ({3})".format(nick, var.get_role(nick), victim, var.get_role(victim)))
     chk_nightdone(cli)
 
 @hook("featurelist")  # For multiple targets with PRIVMSG
@@ -4666,7 +4666,7 @@ def relay(cli, nick, chan, rest):
                     if guy in var.PLAYERS], "\02{0}\02{1}".format(nick, rest))
             else:
                 mass_privmsg(cli, [guy for guy in badguys
-                    if guy in var.PLAYERS], "\02{0}\02 says: {1}".format(nick, rest))
+                    if guy in var.PLAYERS], "\02{0}\02 diu: {1}".format(nick, rest))
 
 def transition_night(cli):
     if var.PHASE == "night":
@@ -4717,7 +4717,7 @@ def transition_night(cli):
         var.DAY_START_TIME = None
         var.DAY_TIMEDELTA += td
         min, sec = td.seconds // 60, td.seconds % 60
-        daydur_msg = "Day lasted \u0002{0:0>2}:{1:0>2}\u0002. ".format(min,sec)
+        daydur_msg = "El dia ha acabat després de \u0002{0:0>2}:{1:0>2}\u0002. ".format(min,sec)
 
     chan = botconfig.CHANNEL
 
@@ -4749,18 +4749,18 @@ def transition_night(cli):
 
         if var.BITTEN[chump] <= 0:
             # now a wolf
-            pm(cli, chump, ("As you prepare for bed, you watch in horror as your body starts growing a coat of fur! " +
-                            "Sudden realization hits you as you grin with your now muzzled face; that mysterious bite " +
-                            "earlier slowly changed you into a werewolf! You feel bigger, stronger, faster, and ready to " +
-                            "seize the night as you stealthily exit your home and search for the rest of your pack..."))
+            pm(cli, chump, (u"Mentre et prepares per dormir, veus amb horror que t'està creixent pél per tot el cos! " +
+                            u"De cop, t'adones del que t'està passant i una ganyota de fàstic t'apareix a la cara; veus que tens una mossegada " +
+                            u"que ha fet que et convertissis en un home-llop! Et sents més gran, fort, ràpid, i a punt per " +
+                            u"aprofitar la nit. Surts de casa en busca de la teva presa..."))
             var.BITTEN_ROLES[chump] = chumprole
             var.ROLES[chumprole].remove(chump)
             var.ROLES["wolf"].append(chump)
             var.FINAL_ROLES[chump] = "wolf"
             for wolf in var.list_players(var.WOLFCHAT_ROLES):
                 if wolf != chump:
-                    pm(cli, wolf, "\u0002{0}\u0002 is now a \u0002wolf\u0002!".format(chump))
-            debuglog("{0} ({1}) TURNED WOLF".format(chump, chumprole))
+                    pm(cli, wolf, u"\u0002{0}\u0002 és ara un \u0002llop\u0002!".format(chump))
+            debuglog("{0} ({1}) CONVERTIT EN LLOP".format(chump, chumprole))
 
     # convert amnesiac and kill village elder if necessary
     if var.NIGHT_COUNT == var.AMNESIAC_NIGHTS:
@@ -4775,11 +4775,11 @@ def transition_night(cli):
                 showrole = "villager"
             elif showrole == "vengeful ghost":
                 showrole = var.DEFAULT_ROLE
-            pm(cli, amn, "Your amnesia clears and you now remember that you are a \u0002{0}\u0002!".format(showrole))
+            pm(cli, amn, u"La teva amnèsia t'ha passat i de sobte recordes que ets un \u0002{0}\u0002!".format(showrole))
             if amnrole in var.WOLFCHAT_ROLES:
                 for wolf in var.list_players(var.WOLFCHAT_ROLES):
-                    pm(cli, wolf, "\u0002{0}\u0002 is now a \u0002{1}\u0002!".format(amn, showrole))
-            debuglog("{0} REMEMBER: {1} as {2}".format(amn, amnrole, showrole))
+                    pm(cli, wolf, u"\u0002{0}\u0002 és ara un \u0002{1}\u0002!".format(amn, showrole))
+            debuglog("{0} RECORDA: {1} com a {2}".format(amn, amnrole, showrole))
 
     numwolves = len(var.list_players(var.WOLF_ROLES))
     if var.NIGHT_COUNT >= numwolves + 1:
@@ -4801,22 +4801,22 @@ def transition_night(cli):
 
         if normal_notify:
             if role == "wolf":
-                pm(cli, wolf, ('You are a \u0002wolf\u0002. It is your job to kill all the '+
-                               'villagers. Use "kill <nick>" to kill a villager.'))
+                pm(cli, wolf, (u'Ets un \u0002llop\u0002. El teu objectiu és exterminar tots '+
+                               u'els vilatans. Utilitza "kill <nick>" per matar un vilatà.'))
             elif role == "traitor":
-                pm(cli, wolf, ('You are a \u0002{0}traitor\u0002. You are exactly like a '+
-                               'villager and not even a seer can see your true identity, '+
-                               'only detectives can.').format(cursed))
+                pm(cli, wolf, (u'Ets un \u0002{0}traïdor\u0002. Ets exactament igual que un '+
+                               u'vilatà i el vident et veu com un d\'ells, '+
+                               u'només els detectius poden veure la teva identitat.').format(cursed))
             elif role == "werecrow":
-                pm(cli, wolf, ('You are a \u0002werecrow\u0002. You are able to fly at night. '+
-                               'Use "kill <nick>" to kill a villager. Alternatively, you can '+
-                               'use "observe <nick>" to check if someone is in bed or not. '+
-                               'Observing will prevent you from participating in a killing.'))
+                pm(cli, wolf, (u'Ets un \u0002home-corb\u0002. Pots volar durant la nit. '+
+                               u'Escriu "kill <nick>" per matar un jugador. Alternativament, pots '+
+                               u'utilitzar "observe <nick>" per saber si algú està dormint o no. '+
+                               u'Si observes no podras participar en un assassinat.'))
             elif role == "hag":
-                pm(cli, wolf, ('You are a \u0002{0}hag\u0002. You can hex someone to prevent them ' +
-                               'from using any special powers they may have during the next day ' +
-                               'and night. Use "hex <nick>" to hex them. Only detectives can reveal ' +
-                               'your true identity, seers will see you as a regular villager.').format(cursed))
+                pm(cli, wolf, (u'Ets una \u0002{0}bruixa\u0002. Pots maleïr a algú per evitar que ' +
+                               u'utilitzi qualsevol poder especial durant el següent dia i nit. ' +
+                               u'Escriu "hex <nick>" per maleïr-lo. Només es detectius poden saber ' +
+                               u'la teva identitat real, els vidents et veuran com un vilatà normal.').format(cursed))
             elif role == "sorcerer":
                 pm(cli, wolf, (u'Ets un \u0002{0}bruixot\u0002. Pots utilitzar "observe <nick>" per ' +
                                u'observar algú i veure si és seer, oracle, o augur. ' +
