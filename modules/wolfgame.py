@@ -4319,30 +4319,30 @@ def get_bitten_message(nick):
                    "You savor the fear in their eyes briefly before you raise your claw to deal a killing blow. " +
                    "Right before it connects, you wake up.")
     elif time_left == 2:
-        message = ("You dreamt of running through the woods outside the village at night, wind blowing across your " +
-                   "face as you weave between the pines. Suddenly you hear a rustling sound as a monstrous creature " +
-                   "jumps out at you - a werewolf! You start running as fast as you can, you soon feel yourself falling " +
-                   "down as you trip over a rock. You look up helplessly as the werewolf catches up to you, " +
-                   "then wake up screaming.")
+        message = (u"Has somiat que corries per fora de la vila. " +
+                   u"De cop senties una soroll i veus un èsser monstruós que " +
+                   u"et salta a sobre - un home-llop! Començes a còrre tan ràpid com pots, però de sobte caus " +
+                   u"sobre una roca. L'home-llop es torna a tira a sobre teu, " +
+                   u"i et despertaves cridant.")
     else:
-        message = ("You had a strange dream last night; a person was running away from something through a forest. " +
-                   "They tripped and fell over a rock as a shadow descended upon them. Before you could actually see " +
-                   "who or what the pursuer was, you woke with a start.")
+        message = (u"Has tingut un somni molt estrany aquesta nit; una persona estava fugint d'alguna cosa dins el bosc. " +
+                   u"La persona ensopegava i queia a terra, i una ombra li queia al damunt. Abans de poder veure " +
+                   u"qui o què era l'agressor, t'aixeques suat.")
     return message
 
 @cmd("bite", chan=False, pm=True, game=True, playing=True, roles=("alpha wolf",))
 def bite_cmd(cli, nick, chan, rest):
     if var.PHASE != "night":
-        pm(cli, nick, "You may only bite at night.")
+        pm(cli, nick, u"Només pots mossegar durant la nit.")
         return
     if nick in var.ALPHA_WOLVES and nick not in var.BITE_PREFERENCES:
-        pm(cli, nick, "You have already bitten someone this game.")
+        pm(cli, nick, u"Ja has mossegat a algú en aquest joc.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar cap poder especial.")
         return
     if not var.ALPHA_ENABLED:
-        pm(cli, nick, "You may only bite someone after another wolf has died during the day.")
+        pm(cli, nick, u"Només pots mossegar a algú si un llop mor durant el dia.")
         return
 
     victim = get_victim(cli, nick, re.split(" +",rest)[0], False)
@@ -4353,12 +4353,12 @@ def bite_cmd(cli, nick, chan, rest):
 
     if var.ANGRY_WOLVES:
         if not victim:
-            pm(cli, nick, "Please choose who to bite by specifying their nick.")
+            pm(cli, nick, "Tria a qui vols mossegar especificant el seu nick.")
             return
 
         vrole = var.get_role(victim)
         if vrole in var.WOLFCHAT_ROLES:
-            pm(cli, nick, "You may not bite other wolves.")
+            pm(cli, nick, "No pots mossegar a altres llops.")
             return
 
     if nick not in var.ALPHA_WOLVES:
@@ -4369,10 +4369,10 @@ def bite_cmd(cli, nick, chan, rest):
     var.BITE_PREFERENCES[nick] = victim
 
     if victim:
-        pm(cli, nick, "You have chosen to bite \u0002{0}\u0002. If that player is not selected to be killed, you will bite one of the wolf targets at random instead.".format(victim))
+        pm(cli, nick, u"Has triat mossegar a \u0002{0}\u0002. Si aquest jugador no és seleccionat perquè els llops el matin, es triarà una altra víctima dels llops a l'atzar.".format(victim))
     else:
-        pm(cli, nick, "You have chosen to bite tonight. Whomever the wolves select to be killed tonight will be bitten instead.")
-    debuglog("{0} ({1}) BITE: {2} ({3})".format(nick, var.get_role(nick), victim if victim else "wolves' target", vrole if vrole else "unknown"))
+        pm(cli, nick, u"Has triat mossegar aquesta nit. La víctima que els llops vulguin matar serà mossegada i es convertirà en llop.")
+    debuglog("{0} ({1}) MOSSEGA: {2} ({3})".format(nick, var.get_role(nick), victim if victim else "wolves' target", vrole if vrole else "unknown"))
 
 @cmd("pass", chan=False, pm=True, game=True, playing=True, roles=("hunter",))
 def pass_cmd(cli, nick, chan, rest):
