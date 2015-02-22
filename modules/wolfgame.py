@@ -4955,17 +4955,17 @@ def transition_night(cli):
         chance = math.floor(var.DETECTIVE_REVEALED_CHANCE * 100)
         warning = ""
         if chance > 0:
-            warning = ("Each time you use your ability, you risk a {0}% chance of having " +
-                       "your identity revealed to the wolves. ").format(chance)
+            warning = ("Cada vegada que utilitzes la teva habilitat, tens un risc d'un {0}% de que la teva " +
+                       "identitat sigui revelada als llops. ").format(chance)
         if dttv in var.PLAYERS and not is_user_simple(dttv):
-            pm(cli, dttv, ("You are a \u0002detective\u0002.\n"+
-                          "It is your job to determine all the wolves and traitors. "+
-                          "Your job is during the day, and you can see the true "+
-                          "identity of all players, even traitors.\n"+
-                          '{0}Use "id <nick>" in PM to identify any player during the day.').format(warning))
+            pm(cli, dttv, (u"Ets un \u0002detectiu\u0002.\n"+
+                          u"La teva feina és descobrir tots els llops i traïdors. "+
+                          u"Pots utilitzar el teu poder durant el dia i veure la "+
+                          u"identitata de tots els jugadors, fins i tot els traïdors.\n"+
+                          u'{0}Utilitza "id <nick>" en privat amb mi per saber la identitat d\'un jugador durant el dia.').format(warning))
         else:
-            pm(cli, dttv, "You are a \02detective\02.")  # !simple
-        pm(cli, dttv, "Players: " + ", ".join(pl))
+            pm(cli, dttv, "Ets un \02detectiu\02.")  # !simple
+        pm(cli, dttv, "Jugadors: " + ", ".join(pl))
 
     for drunk in var.ROLES["village drunk"]:
         if drunk in var.PLAYERS and not is_user_simple(drunk):
