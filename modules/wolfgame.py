@@ -4818,31 +4818,31 @@ def transition_night(cli):
                                'and night. Use "hex <nick>" to hex them. Only detectives can reveal ' +
                                'your true identity, seers will see you as a regular villager.').format(cursed))
             elif role == "sorcerer":
-                pm(cli, wolf, ('You are a \u0002{0}sorcerer\u0002. You can use "observe <nick>" to ' +
-                               'observe someone and determine if they are the seer, oracle, or augur. ' +
-                               'Only detectives can reveal your true identity, seers will see you ' +
-                               'as a regular villager.').format(cursed))
+                pm(cli, wolf, (u'Ets un \u0002{0}bruixot\u0002. Pots utilitzar "observe <nick>" per ' +
+                               u'observar algú i veure si és seer, oracle, o augur. ' +
+                               u'Només els detectius poden saber la teva identitat verdadera, els vidents et veuran ' +
+                               u'com un vilatà normal.').format(cursed))
             elif role == "wolf cub":
-                pm(cli, wolf, ('You are a \u0002wolf cub\u0002. While you cannot kill anyone, ' +
-                               'the other wolves will become enraged if you die and will get ' +
-                               'two kills the following night.'))
+                pm(cli, wolf, (u'Ets una \u0002cria de llop\u0002. Tot i que no pots matar a ningú, ' +
+                               u'els altres llops s\'enfadaran molt si et mors i podran ' +
+                               u'matar a dues persones la següent nit.'))
             elif role == "alpha wolf":
-                pm(cli, wolf, ('You are an \u0002alpha wolf\u0002. Once per game following the death of another wolf ' +
-                               'during the day, you can choose to bite the wolves\' next target to turn ' +
-                               'them into a wolf instead of killing them. Kill villagers by using '
-                               '"kill <nick>" and "bite" to use your once-per-game bite power.'))
+                pm(cli, wolf, (u'Ets un \u0002llop alfa\u0002. Una vegada per joc, quan un altre llop mor ' +
+                               u'durant el dia, pots mossegar la següent víctima dels llops ' +
+                               u'per convertir-la en un llop en comptes de matar-la. Pots matar els vilatans escrivint '
+                               u'"kill <nick>" i "bite" per mossegar (una vegada per partida).'))
             else:
                 # catchall in case we forgot something above
                 an = 'n' if role[0] in ('a', 'e', 'i', 'o', 'u') else ''
-                pm(cli, wolf, ('You are a{0} \u0002{1}\u0002. There would normally be instructions ' +
-                               'here, but someone forgot to add them in. Please report this to ' +
-                               'the admins, you can PM me "admins" for a list of available ones.').format(an, role))
+                pm(cli, wolf, (u'Ets un \u0002{1}\u0002. En principi hauries de tenir instruccions aquí, ' +
+                               u'però algú s\'haurà oblidat de posar-les. Si us plau, reporta-ho ' +
+                               u'als administradors, pots enviar-me un missatge privat dient "admins" per una llista dels administrador disponibles.').format(role))
 
             if len(wolves) > 1:
-                pm(cli, wolf, 'Also, if you PM me, your message will be relayed to other wolves.')
+                pm(cli, wolf, u'A més, si m\'envies un missatge privat la resta de llops també el rebràn.')
         else:
             an = 'n' if cursed == '' and role[0] in ('a', 'e', 'i', 'o', 'u') else ''
-            pm(cli, wolf, "You are a{0} \02{1}{2}\02.".format(an, cursed, role))  # !simple
+            pm(cli, wolf, "Ets un \02{0}{1}\02.".format(cursed, role))  # !simple
 
         pl = ps[:]
         random.shuffle(pl)
@@ -4855,20 +4855,20 @@ def transition_night(cli):
                     cursed = "cursed "
                 pl[i] = "\u0002{0}\u0002 ({1}{2})".format(player, cursed, prole)
             elif player in var.ROLES["cursed villager"]:
-                pl[i] = player + " (cursed)"
+                pl[i] = player + u" (maleït)"
 
-        pm(cli, wolf, "Players: " + ", ".join(pl))
+        pm(cli, wolf, "Jugadors: " + ", ".join(pl))
         if wolf in var.WOLF_GUNNERS.keys() and var.WOLF_GUNNERS[wolf] > 0:
-            pm(cli, wolf, "You have a \u0002gun\u0002 with {0} bullet{1}.".format(var.WOLF_GUNNERS[wolf], "s" if var.WOLF_GUNNERS[wolf] > 1 else ""))
+            pm(cli, wolf, u"Tens una \u0002pistola\u0002 amb {0} bal{1}.".format(var.WOLF_GUNNERS[wolf], "es" if var.WOLF_GUNNERS[wolf] > 1 else "a"))
         angry_alpha = ''
         if var.DISEASED_WOLVES:
-            pm(cli, wolf, 'You are feeling ill tonight, and are unable to kill anyone.')
+            pm(cli, wolf, u'Oh! Estàs malalt i aquesta nit no pots matar a ningú!')
         elif var.ANGRY_WOLVES and role in ("wolf", "werecrow", "alpha wolf"):
-            pm(cli, wolf, 'You are \u0002angry\u0002 tonight, and may kill two targets by using "kill <nick1> and <nick2>".')
+            pm(cli, wolf, u'Aquesta nit estàs \u0002enfadat\u0002, i pots matar dues persones escrivint "kill <nick1> and <nick2>".')
             angry_alpha = ' <nick>'
         if var.ALPHA_ENABLED and role == "alpha wolf" and wolf not in var.ALPHA_WOLVES:
-            pm(cli, wolf, ('You may use "bite{0}" tonight in order to turn the wolves\' target into a wolf instead of killing them. ' +
-                           'They will turn into a wolf in {1} night{2}.').format(angry_alpha, var.ALPHA_WOLF_NIGHTS, 's' if var.ALPHA_WOLF_NIGHTS > 1 else ''))
+            pm(cli, wolf, (u'Pots utilitzar "bite{0}" aquesta nit per convertir la víctima dels llops en un altre llop en comptes de matar-lo. ' +
+                           u'Es convertirà en llop d\'aquí a {1} nit{2}.').format(angry_alpha, var.ALPHA_WOLF_NIGHTS, 's' if var.ALPHA_WOLF_NIGHTS > 1 else ''))
 
     for seer in var.list_players(["seer", "oracle", "augur"]):
         pl = ps[:]
@@ -4876,40 +4876,40 @@ def transition_night(cli):
         role = var.get_role(seer)
         pl.remove(seer)  # remove self from list
 
-        a = "a"
+        a = "un"
         if role in ("oracle", "augur"):
-            a = "an"
+            a = "un"
 
         if role == "seer":
-            what = "the role of a player"
+            what = u"el rol d'un jugador"
         elif role == "oracle":
-            what = "whether or not a player is a wolf"
+            what = u"si un jugador és llop o no"
         elif role == "augur":
-            what = "which team a player is on"
+            what = u"de quin equip és un jugador"
         else:
-            what = "??? (this is a bug, please report to admins)"
+            what = u"??? (això és un error. Si us plau, reporta-ho a un administrador)"
 
         if seer in var.PLAYERS and not is_user_simple(seer):
-            pm(cli, seer, ('You are {0} \u0002{1}\u0002. '+
-                          'It is your job to detect the wolves, you '+
-                          'may have a vision once per night. '+
-                          'Use "see <nick>" to see {2}.').format(a, role, what))
+            pm(cli, seer, (u'Ets {0} \u0002{1}\u0002. '+
+                          u'La teva feina consisteix en detectar els llops '+
+                          u'tenint una visió per nit. '+
+                          u'Escriu "see <nick>" per veure {2}.').format(a, role, what))
         else:
-            pm(cli, seer, "You are {0} \02{1}\02.".format(a, role))  # !simple
-        pm(cli, seer, "Players: " + ", ".join(pl))
+            pm(cli, seer, "Ets un {0} \02{1}\02.".format(a, role))  # !simple
+        pm(cli, seer, "Jugador: " + ", ".join(pl))
 
     for harlot in var.ROLES["harlot"]:
         pl = ps[:]
         random.shuffle(pl)
         pl.remove(harlot)
         if harlot in var.PLAYERS and not is_user_simple(harlot):
-            pm(cli, harlot, ('You are a \u0002harlot\u0002. '+
-                             'You may spend the night with one person per round. '+
-                             'If you visit a victim of a wolf, or visit a wolf, '+
-                             'you will die. Use visit to visit a player.'))
+            pm(cli, harlot, (u'Ets una \u0002prostituta\u0002. '+
+                             u'Pots passar la nit amb un altra jugador. '+
+                             u'Si visites una víctima d\'un llop, o visites un llop, '+
+                             u'moriràs. Escriu "visit <nick>" per visitar un jugador.'))
         else:
-            pm(cli, harlot, "You are a \02harlot\02.")  # !simple
-        pm(cli, harlot, "Players: " + ", ".join(pl))
+            pm(cli, harlot, "Ets una \02prostituta\02.")  # !simple
+        pm(cli, harlot, "Jugadors: " + ", ".join(pl))
 
     # the messages for angel and guardian angel are different enough to merit individual loops
     for g_angel in var.ROLES["bodyguard"]:
@@ -4919,16 +4919,16 @@ def transition_night(cli):
         chance = math.floor(var.BODYGUARD_DIES_CHANCE * 100)
         warning = ""
         if chance > 0:
-            warning = "If you guard a wolf, there is a {0}% chance of you dying. ".format(chance)
+            warning = "Si protegeixes un llop, hi ha un {0}% de possibilitats de que moris. ".format(chance)
 
         if g_angel in var.PLAYERS and not is_user_simple(g_angel):
-            pm(cli, g_angel, ('You are a \u0002bodyguard\u0002. '+
-                              'It is your job to protect the villagers. {0}If you guard '+
-                              'a victim, you will sacrifice yourself to save them. ' +
-                              'Use "guard <nick>" to guard a player.').format(warning))
+            pm(cli, g_angel, (u'Ets un \u0002guardaespatlles\u0002. '+
+                              u'La teva feina és protegir els habitants del poble. {0}Si protegeixes '+
+                              u'una víctima dels llops, et sacrificaràs perquè no mori. ' +
+                              u'Escriu "guard <nick>" per protegir un jugador.').format(warning))
         else:
-            pm(cli, g_angel, "You are a \02bodyguard\02.")  # !simple
-        pm(cli, g_angel, "Players: " + ", ".join(pl))
+            pm(cli, g_angel, "Ets un \02guardaespatlles\02.")  # !simple
+        pm(cli, g_angel, "Jugadors: " + ", ".join(pl))
 
     for gangel in var.ROLES["guardian angel"]:
         pl = ps[:]
@@ -4937,13 +4937,13 @@ def transition_night(cli):
         chance = math.floor(var.GUARDIAN_ANGEL_DIES_CHANCE * 100)
         warning = ""
         if chance > 0:
-            warning = "If you guard a wolf, there is a {0}% chance of you dying. ".format(chance)
+            warning = u"Si protegeixes un llop, hi ha una probabilitat d'un {0}% que moris. ".format(chance)
 
         if gangel in var.PLAYERS and not is_user_simple(gangel):
-            pm(cli, gangel, ('You are a \u0002guardian angel\u0002. '+
-                              'It is your job to protect the villagers. {0}If you guard '+
-                              'a victim, they will live. You may not guard the same person two nights in a row. ' +
-                              'Use "guard <nick>" to guard a player.').format(warning))
+            pm(cli, gangel, (u'Ets un \u0002àngel guardià\u0002. '+
+                              u'La teva feina és protegir els habitants del poble. {0}Si protegeixes '+
+                              u'una víctima dels llops, sobreviurà. No pots protegir la mateixa persona durant dues nits seguides. ' +
+                              u'Escriu "guard <nick>" per protegir un jugador.').format(warning))
         else:
             pm(cli, gangel, "You are a \02guardian angel\02.")  # !simple
         pm(cli, gangel, "Players: " + ", ".join(pl))
