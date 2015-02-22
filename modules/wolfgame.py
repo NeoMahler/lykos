@@ -4969,9 +4969,9 @@ def transition_night(cli):
 
     for drunk in var.ROLES["village drunk"]:
         if drunk in var.PLAYERS and not is_user_simple(drunk):
-            pm(cli, drunk, "You have been drinking too much! You are the \u0002village drunk\u0002.")
+            pm(cli, drunk, "Has begut massa! Ets un \u0002borratxo\u0002.")
         else:
-            pm(cli, drunk, "You are the \u0002village drunk\u0002.")
+            pm(cli, drunk, "Ets un \u0002borratxo\u0002.")
 
     max_totems = {}
     for sham in var.TOTEM_ORDER:
@@ -4992,50 +4992,50 @@ def transition_night(cli):
                 var.TOTEMS[shaman] = t
                 break
         if shaman in var.PLAYERS and not is_user_simple(shaman):
-            pm(cli, shaman, ('You are a \u0002{0}\u0002. You can select a player to receive ' +
-                             'a {1}totem each night by using "give <nick>". You may give yourself a totem, but you ' +
-                             'may not give the same player a totem two nights in a row.').format(role, "random " if shaman in var.ROLES["crazed shaman"] else ""))
+            pm(cli, shaman, (u'Ets un \u0002{0}\u0002. Pots seleccionar un jugador perquè rebi un ' +
+                             u'totem{1} cada nit utilitzant "give <nick>". Pots donar-te un tòtem a tu mateix però ' +
+                             u'no pots donar al mateix jugador dos tòtems seguits.').format(role, " aleatòri" if shaman in var.ROLES["crazed shaman"] else ""))
             if role != "crazed shaman":
                 totem = var.TOTEMS[shaman]
-                tmsg = 'You have the \u0002{0}\u0002 totem. '.format(totem)
+                tmsg = 'Tens el tòtem \u0002{0}\u0002. '.format(totem)
                 if totem == "death":
-                    tmsg += 'The player who is given this totem will die tonight, even if they are being protected.'
+                    tmsg += u'El jugador que rep el tòtem morirà aquesta nit, encara que estigui protegit.'
                 elif totem == "protection":
-                    tmsg += 'The player who is given this totem is protected from dying tonight.'
+                    tmsg += u'El jugador que rep el tòtem no podrà morir aquesta nit.'
                 elif totem == "revealing":
-                    tmsg += 'If the player who is given this totem is lynched, their role is revealed to everyone instead of them dying.'
+                    tmsg += u'Si el jugador que rep el tòtem és linxat, el seu rol es revela però no mor.'
                 elif totem == "narcolepsy":
-                    tmsg += 'The player who is given this totem will be unable to vote during the day tomorrow.'
+                    tmsg += u'El jugador que rep el tòtem no podrà votar demà.'
                 elif totem == "silence":
-                    tmsg += 'The player who is given this totem will be unable to use any special powers during the day tomorrow and the night after.'
+                    tmsg += u'El jugador que rep el tòtem no podrà utilitzar cap poder especial durant el proper dia i nit.'
                 elif totem == "desperation":
-                    tmsg += 'If the player who is given this totem is lynched, the last player to vote them will also die.'
+                    tmsg += u'Si el jugador que rep el tòtem mor linxat, l\'últim jugador en votar-lo també morirà.'
                 elif totem == "impatience":
-                    tmsg += 'The player who is given this totem is counted as voting for everyone except themselves, even if they do not !vote.'
+                    tmsg += u'EL jugador que rep el tòtem votarà per tòtem excepte per ell mateix, fins i tot si no utilitza l\'ordre per votar.'
                 elif totem == "pacifism":
-                    tmsg += 'Votes by the player who is given this totem do not count.'
+                    tmsg += u'Els vots del jugador que rep el tòtem no valdràn.'
                 elif totem == "influence":
-                    tmsg += 'Votes by the player who is given this totem count twice.'
+                    tmsg += u'Els vots del jugador que rep el tòtem valdràn el doble.'
                 elif totem == "exchange":
-                    tmsg += 'The first person to use a power on the player given this totem tomorrow night will have their role swapped with the recipient.'
+                    tmsg += u'La primera persona que utilitzi un poder sobre el jugador que rep el tòtem la propera nit es canviarà de rol amb el que rep el tòtem.'
                 elif totem == "lycanthropy":
-                    tmsg += 'If the player who is given this totem is targeted by wolves tomorrow night, they will become a wolf.'
+                    tmsg += u'Si el jugador que rep el tòtem és escollit pels llops, es convertirà en un d\'ells.'
                 elif totem == "luck":
-                    tmsg += 'If the player who is given this totem is targeted tomorrow night, one of the players adjacent to them will be targeted instead.'
+                    tmsg += 'Si el jugador que rep el tòtem és escollit per algun rol especial, un dels jugadors que estiguin al seu costat rebran els efectes de l\'acció en el seu lloc.'
                 elif totem == "pestilence":
-                    tmsg += 'If the player who is given this totem is killed by wolves tomorrow night, the wolves will not be able to kill the night after.'
+                    tmsg += u'Si el jugador que rep el tòtem mor la propera nit, els llops no podràn matar a ningú la nit següent.'
                 elif totem == "retribution":
-                    tmsg += 'If the player who is given this totem will die tonight, they also kill anyone who killed them.'
+                    tmsg += u'Si el jugador que rep el tòtem mor aquesta nit, el seu fantasma vindrà i matarà el seu assassí.'
                 elif totem == "misdirection":
-                    tmsg += 'If the player who is given this totem attempts to use a power the following day or night, they will target a player adjacent to their intended target instead of the player they targeted.'
+                    tmsg += u'Si el jugador que rep el tòtem intenta utilitzar algun poder el proper dia o nit, s\'equivocarà i escollirà el jugador que estigui al costat de la víctima que ha escollit.'
                 else:
-                    tmsg += 'No description for this totem is available. This is a bug, so please report this to the admins.'
+                    tmsg += u'La descripció d\'aquest tòtem no està disponible. Això és un error; si us plau, reporta-ho a un administrador.'
                 pm(cli, shaman, tmsg)
         else:
-            pm(cli, shaman, "You are a \u0002{0}\u0002.".format(role))
+            pm(cli, shaman, "Ets un \u0002{0}\u0002.".format(role))
             if role != "crazed shaman":
-                pm(cli, shaman, "You have the \u0002{0}\u0002 totem.".format(var.TOTEMS[shaman]))
-        pm(cli, shaman, "Players: " + ", ".join(pl))
+                pm(cli, shaman, u"Tens el tòtem de \u0002{0}\u0002.".format(var.TOTEMS[shaman]))
+        pm(cli, shaman, "Jugadors: " + ", ".join(pl))
 
     for hunter in var.ROLES["hunter"]:
         if hunter in var.HUNTERS:
@@ -5044,12 +5044,12 @@ def transition_night(cli):
         random.shuffle(pl)
         pl.remove(hunter)
         if hunter in var.PLAYERS and not is_user_simple(hunter):
-            pm(cli, hunter, ('You are a \u0002hunter\u0002. Once per game, you may kill another ' +
-                             'player with "kill <nick>". If you do not wish to kill anyone tonight, ' +
-                             'use "pass" instead.'))
+            pm(cli, hunter, (u'Ets un \u0002caçador\u0002. Una vegada per joc pots matar un ' +
+                             u'jugador escrivint "kill <nick>". Si no vols matar a ningú aquesta nit, ' +
+                             u'escriu "pass".'))
         else:
-            pm(cli, hunter, "You are a \u0002hunter\u0002.")
-        pm(cli, hunter, "Players: " + ", ".join(pl))
+            pm(cli, hunter, u"Ets un \u0002caçador\u0002.")
+        pm(cli, hunter, "Jugadors: " + ", ".join(pl))
 
 
     for ms in var.ROLES["mad scientist"]:
@@ -5076,57 +5076,57 @@ def transition_night(cli):
                 if var.ALL_PLAYERS[i] in pl or var.ALL_PLAYERS[i] == ms:
                     target2 = var.ALL_PLAYERS[i]
                     break
-        targets = "\u0002{0}\u0002 and \u0002{1}\u0002".format(target1, target2)
+        targets = "\u0002{0}\u0002 i \u0002{1}\u0002".format(target1, target2)
         if ms in var.PLAYERS and not is_user_simple(ms):
-            pm(cli, ms, ("You are the \u0002mad scientist\u0002. If you die, " +
-                         "you will let loose a potent chemical concoction that " +
-                         "will kill {0} if they are still alive.".format(targets)))
+            pm(cli, ms, (u"Ets el \u0002científic boig\u0002. Si mors, " +
+                         u"deixaràs anar una poció molt potent que " +
+                         u"matarà a {0} si encara són vius.".format(targets)))
         else:
-            pm(cli, ms, "You are the \u0002mad scientist\u0002. Targets: {0}".format(targets))
+            pm(cli, ms, u"Ets el \u0002científic boig\u0002. Víctimes: {0}".format(targets))
 
     for doctor in var.ROLES["doctor"]:
         if var.DOCTORS[doctor] > 0: # has immunizations remaining
             pl = ps[:]
             random.shuffle(pl)
             if doctor in var.PLAYERS and not is_user_simple(doctor):
-                pm(cli, doctor, ('You are a \u0002doctor\u0002. You can give out immunizations to ' +
-                                 'villagers by using "give <nick>" in PM during the daytime. ' +
-                                 'An immunized villager will die instead of turning into a wolf due to the ' +
-                                 'alpha wolf\'s or lycan\'s power.'))
+                pm(cli, doctor, (u'Ets un \u0002metge\u0002. Pots dnar medicaments als ' +
+                                 u'habitants escrivint-me "give <nick>" en privat durant el dia. ' +
+                                 u'Un habitant immunitzat morirà en comptes de convertir-se en llop ' +
+                                 u'en conseqüència dels poders del llop alfa o dels homes-llop.'))
             else:
-                pm(cli, doctor, "You are a \u0002doctor\u0002.")
-            pm(cli, doctor, 'You have \u0002{0}\u0002 immunization{1}.'.format(var.DOCTORS[doctor], 's' if var.DOCTORS[doctor] > 1 else ''))
+                pm(cli, doctor, "Ets un \u0002metge\u0002.")
+            pm(cli, doctor, 'Tens \u0002{0}\u0002 medicament{1}.'.format(var.DOCTORS[doctor], 's' if var.DOCTORS[doctor] > 1 else ''))
 
     for fool in var.ROLES["fool"]:
         if fool in var.PLAYERS and not is_user_simple(fool):
-            pm(cli, fool, ('You are a \u0002fool\u0002. The game immediately ends with you ' +
-                           'being the only winner if you are lynched during the day. You cannot ' +
-                           'otherwise win this game.'))
+            pm(cli, fool, (u'Ets un \u0002boig\u0002. El joc s\'acaba immediatamanti tu ' +
+                           u'ets l\'únic guanyador si ets linxat durant el dia. No pots ' +
+                           u'guanyar d\'una altra manera.'))
         else:
-            pm(cli, fool, "You are a \u0002fool\u0002.")
+            pm(cli, fool, "Ets un \u0002boig\u0002.")
 
     for jester in var.ROLES["jester"]:
         if jester in var.PLAYERS and not is_user_simple(jester):
-            pm(cli, jester, ('You are a \u0002jester\u0002. You will win alongside the normal winners ' +
-                             'if you are lynched during the day. You cannot otherwise win this game.'))
+            pm(cli, jester, (u'Ets un \u0002bufó\u0002. Guanyaràs amb els guanyadors normals ' +
+                             u'si ets linxat durant el dia. No pots guanyar el joc d\'una altra manera.'))
         else:
-            pm(cli, jester, "You are a \u0002jester\u0002.")
+            pm(cli, jester, u"Ets un \u0002bufó\u0002.")
 
     for monster in var.ROLES["monster"]:
         if monster in var.PLAYERS and not is_user_simple(monster):
-            pm(cli, monster, ('You are a \u0002monster\u0002. You cannot be killed by the wolves. ' +
-                              'If you survive until the end of the game, you win instead of the ' +
-                              'normal winners.'))
+            pm(cli, monster, (u'Ets un \u0002monstre\u0002. Els llops no poden et matar. ' +
+                              u'Si sobrevius fins a l\'última nit guanyaràs en lloc dels ' +
+                              u'guanyadors normals.'))
         else:
-            pm(cli, monster, "You are a \u0002monster\u0002.")
+            pm(cli, monster, "Ets un \u0002monstre\u0002.")
 
     for lycan in var.ROLES["lycan"]:
         if lycan in var.PLAYERS and not is_user_simple(lycan):
-            pm(cli, lycan, ('You are a \u0002lycan\u0002. You are currently on the side of the ' +
-                            'villagers, but will turn into a wolf if you are targeted by them ' +
-                            'during the night.'))
+            pm(cli, lycan, (u'Ets un \u0002home llop\u0002. Ara mateix estàs a l\'equip dels ' +
+                            u'habitants, però si durant la nit un llop t\'intenta matar ' +
+                            u'et convertiràs en un d\'ells.'))
         else:
-            pm(cli, lycan, "You are a \u0002lycan\u0002.")
+            pm(cli, lycan, u"Ets un \u0002home-llop\u0002.")
 
     for v_ghost, who in var.VENGEFUL_GHOSTS.items():
         if who[0] == "!":
@@ -5142,14 +5142,14 @@ def transition_night(cli):
         random.shuffle(pl)
 
         if v_ghost in var.PLAYERS and not is_user_simple(v_ghost):
-            pm(cli, v_ghost, ('You are a \u0002vengeful ghost\u0002, sworn to take revenge on the ' +
-                              '{0} that you believe killed you. You must kill one of them with ' +
-                              '"kill <nick>" tonight. If you do not, one of them will be selected ' +
-                              'at random.').format(who))
+            pm(cli, v_ghost, (u'Ets un \u0002fantasma venjador\u0002, hi has jurat venjar-te de ' +
+                              u'{0}, que segons tu t\'ha matat. N\'has de matar un escrivint ' +
+                              u'"kill <nick>" aquesta nit. Si no ho fas, la selecció serà ' +
+                              u'aleatòria.').format(who))
         else:
-            pm(cli, v_ghost, "You are a \u0002vengeful ghost\u0002.")
+            pm(cli, v_ghost, "Ets un \u0002fantasma venjador\u0002.")
         pm(cli, v_ghost, who.capitalize() + ": " + ", ".join(pl))
-        debuglog("GHOST: {0} (target: {1}) - players: {2}".format(v_ghost, who, ", ".join(pl)))
+        debuglog(u"GHOST: {0} (víctima: {1}) - jugadors: {2}".format(v_ghost, who, ", ".join(pl)))
 
     for ass in var.ROLES["assassin"]:
         if ass in var.TARGETED and var.TARGETED[ass] != None:
@@ -5160,31 +5160,31 @@ def transition_night(cli):
         role = var.get_role(ass)
         if role == "village drunk":
             var.TARGETED[ass] = random.choice(pl)
-            message = ("You are an \u0002assassin\u0002. In your drunken stupor you have selected " +
-                       "\u0002{0}\u0002 as your target.").format(var.TARGETED[ass])
+            message = (u"Ets un \u0002assassí\u0002. En la teva borratxera has seleccionat a " +
+                       u"\u0002{0}\u0002 per ser la teva víctima.").format(var.TARGETED[ass])
             if ass in var.PLAYERS and not is_user_simple(ass):
-                message += " If you die you will take out your target with you."
+                message += u" Si mors, la teva víctima morirà amb tu."
             pm(cli, ass, message)
         else:
             if ass in var.PLAYERS and not is_user_simple(ass):
-                pm(cli, ass, ('You are an \u0002assassin\u0002. Choose a target with ' +
-                              '"target <nick>". If you die you will take out your target with you. ' +
-                              'If your target dies you may choose another one.'))
+                pm(cli, ass, (u'Ets un \u0002assassí\u0002. Tria una víctima escrivint ' +
+                              u'"target <nick>". Si mors, la teva víctima morirà amb tu. ' +
+                              u'Si la teva víctima mor en podràs escollir una altra.'))
             else:
-                pm(cli, ass, "You are an \u0002assassin\u0002.")
-            pm(cli, ass, "Players: " + ", ".join(pl))
+                pm(cli, ass, u"Ets un \u0002assassí\u0002.")
+            pm(cli, ass, "Jugadors: " + ", ".join(pl))
 
     if var.FIRST_NIGHT:
         for mm in var.ROLES["matchmaker"]:
             pl = ps[:]
             random.shuffle(pl)
             if mm in var.PLAYERS and not is_user_simple(mm):
-                pm(cli, mm, (u'Ets un \u0002matchmaker\u0002. Pots seleccionar dos jugadors ' +
+                pm(cli, mm, (u'Ets un \u0002matrimonier\u0002. Pots seleccionar dos jugadors ' +
                              u'perquè s\'enamorin escrivint "choose <nick1> and <nick2>". Si un enamorat ' +
                              u'mor, l\'altre també ho farà. També pots seleccioar-te a tu mateix ' +
                              u'per estar enamorat. Només pots enamorar a dues persones durant la primera nit.'))
             else:
-                pm(cli, mm, "Ets un \u0002matchmaker\u0002.")
+                pm(cli, mm, "Ets un \u0002matrimonier\u0002.")
             pm(cli, mm, "Jugadors: " + ", ".join(pl))
 
         for clone in var.ROLES["clone"]:
@@ -5203,9 +5203,9 @@ def transition_night(cli):
             wolves = var.list_players(var.WOLF_ROLES)
             random.shuffle(wolves)
             if minion in var.PLAYERS and not is_user_simple(minion):
-                pm(cli, minion, "Ets un \u0002minion\u0002. La teva feina és ajudar als llops a matar tots els habitants del poble.")
+                pm(cli, minion, "Ets un \u0002esbirro\u0002. La teva feina és ajudar als llops a matar tots els habitants del poble.")
             else:
-                pm(cli, minion, "Ets un \u0002minion\u0002.")
+                pm(cli, minion, "Ets un \u0002esbirro\u0002.")
             pm(cli, minion, "Llops: " + ", ".join(wolves))
 
         villagers = copy.copy(var.ROLES["villager"])
@@ -5223,9 +5223,9 @@ def transition_night(cli):
             cultists += var.ROLES["vengeful ghost"] + var.ROLES["amnesiac"]
         for cultist in cultists:
             if cultist in var.PLAYERS and not is_user_simple(cultist):
-                pm(cli, cultist, u"Ets un \u0002cultist\u0002. La teva feina és ajudar als llops a matar tots els habitants del poble.")
+                pm(cli, cultist, u"Ets un \u0002cultista\u0002. La teva feina és ajudar als llops a matar tots els habitants del poble.")
             else:
-                pm(cli, cultist, u"Ets un \u0002cultist\u0002.")
+                pm(cli, cultist, u"Ets un \u0002cultista\u0002.")
 
     for g in var.GUNNERS.keys():
         if g not in ps:
