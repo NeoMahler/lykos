@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 # Copyright (c) 2011, Jimmy Cao
 # All rights reserved.
 
@@ -59,21 +60,21 @@ def generate(fdict, permissions=True, **kwargs):
                 if "" in s:
                     return f(*largs)
                 if game and var.PHASE not in ("day", "night") + (("join",) if join else ()):
-                    largs[0].notice(nick, "No game is currently running.")
+                    largs[0].notice(nick, u"No hi ha cap joc en procés.")
                     return
                 if ((join and none and var.PHASE not in ("join", "none"))
                         or (none and not join and var.PHASE != "none")):
-                    largs[0].notice(nick, "Sorry, but the game is already running. Try again next time.")
+                    largs[0].notice(nick, u"El joc ja ha començat Intenta-ho més tard.")
                     return
                 if join and not none:
                     if var.PHASE == "none":
-                        largs[0].notice(nick, "No game is currently running.")
+                        largs[0].notice(nick, u"No hi ha cap joc en procés.")
                         return
                     if var.PHASE != "join" and not game:
-                        largs[0].notice(nick, "Werewolf is already in play.")
+                        largs[0].notice(nick, u"El joc ja ha començat.")
                         return
                 if playing and nick not in var.list_players() or nick in var.DISCONNECTED.keys():
-                    largs[0].notice(nick, "You're not currently playing.")
+                    largs[0].notice(nick, u"No estàs jugant.")
                     return
                 if roles:
                     for role in roles:
@@ -86,7 +87,7 @@ def generate(fdict, permissions=True, **kwargs):
                         if fnmatch.fnmatch(acc.lower(), pattern.lower()):
                             for cmdname in s:
                                 if cmdname in var.DENY_ACCOUNTS[pattern]:
-                                    largs[0].notice(nick, "You do not have permission to use that command.")
+                                    largs[0].notice(nick, u"No tens permís per utilitzar aquesta ordre.")
                                     return
                     for pattern in var.ALLOW_ACCOUNTS.keys():
                         if fnmatch.fnmatch(acc.lower(), pattern.lower()):
@@ -100,7 +101,7 @@ def generate(fdict, permissions=True, **kwargs):
                         if fnmatch.fnmatch(cloak.lower(), pattern.lower()):
                             for cmdname in s:
                                 if cmdname in var.DENY[pattern]:
-                                    largs[0].notice(nick, "You do not have permission to use that command.")
+                                    largs[0].notice(nick, u"No tens permís per utilitzar aquesta ordre.")
                                     return
                     for pattern in var.ALLOW.keys():
                         if fnmatch.fnmatch(cloak.lower(), pattern.lower()):
@@ -114,14 +115,14 @@ def generate(fdict, permissions=True, **kwargs):
                         adminlog(largs[2], rawnick, s[0], largs[3])
                         return f(*largs)
                     else:
-                        largs[0].notice(nick, "You are not the owner.")
+                        largs[0].notice(nick, "No ets el meu propietari.")
                         return
                 if admin_only:
                     if var.is_admin(nick, cloak):
                         adminlog(largs[2], rawnick, s[0], largs[3])
                         return f(*largs)
                     else:
-                        largs[0].notice(nick, "You are not an admin.")
+                        largs[0].notice(nick, "No ets un administrador.")
                         return
                 return f(*largs)
             alias = False
