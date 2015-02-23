@@ -1,3 +1,4 @@
+# -*- coding:utf-8 -*-
 PING_WAIT = 300  # Seconds
 PING_MIN_WAIT = 30
 MINIMUM_WAIT = 60 
@@ -65,21 +66,21 @@ ROLE_INDICES = {0 : "seer",
 INDEX_OF_ROLE = dict((v,k) for k,v in ROLE_INDICES.items())
 
 
-NO_VICTIMS_MESSAGES = ("The body of a young penguin pet is found.",
-                       "A pool of blood and wolf paw prints are found.",
-                       "Traces of wolf fur are found.")
-LYNCH_MESSAGES = ("The villagers, after much debate, finally decide on lynching \u0002{0}\u0002, who turned out to be... a \u0002{1}\u0002.",
-                  "Under a lot of noise, the pitchfork-bearing villagers lynch \u0002{0}\u0002, who turned out to be... a \u0002{1}\u0002.",
-                  "The mob drags a protesting \u0002{0}\u0002 to the hanging tree. S/He succumbs to the will of the horde, and is hanged. It is discovered (s)he was a \u0002{1}\u0002.",
-                  "Resigned to his/her fate, \u0002{0}\u0002 is led to the gallows. After death, it is discovered (s)he was a \u0002{1}\u0002.")
+NO_VICTIMS_MESSAGES = (u"El cos d'un petit pingüí és trobat.",
+                       u"Es troben gotes de sang i petjades de llop.",
+                       u"S'han trobat rastres de llops.")
+LYNCH_MESSAGES = (u"Els habitants, després de moltes discussions, decideixen linxar a \u0002{0}\u0002. Quan es mor veuen que era... un \u0002{1}\u0002.",
+                  u"Amb molt soroll, els habitants, enfadats després de les morts dels seus amics, decideixen linxar a \u0002{0}\u0002 i descobreixen que han linxat a un... \u0002{1}\u0002.",
+                  u"El condemnat, \u0002{0}\u0002, és arrossegat cap a la forca. Amb la cara deformada per l'horror, crida i intenta defensar-se. Es descobreix que era un \u0002{1}\u0002.",
+                  u"Resignat al seu destí, \u0002{0}\u0002 és portat a la guillotina. Després de la seva mort, es descobreix que era un \u0002{1}\u0002.")
 
 import botconfig
 
-RULES = (botconfig.CHANNEL + " channel rules: 1) Be nice to others. 2) Do not share information "+
-         "after death. 3) No bots allowed. 4) Do not play with clones.\n"+
-         "5) Do not quit unless you need to leave. 6) No swearing and keep it "+
-         "family-friendly. 7) Do not paste PM's from the bot during the game. "+
-         "8) Use common sense. 9) Waiting for timeouts is discouraged.")                                              
+RULES = (botconfig.CHANNEL + u" Normes del canal: 1) Sigues educat. 2) No comparteixis informació "+
+         u"després de morir. 3) Els bots no autoritzats no es permeten. 4) Es prohibeixen els nicks titella.\n"+
+         u"5) No deixis el joc si no és necessari. 6) Mantingues un ambient "+
+         u"familiar. 7) No facis copiar-enganxar dels missatges del bot per defensar el teu rol. "+
+         u"8) Utilitza el sentit comú.")                                              
 
 # Other settings:
 START_WITH_DAY = False
@@ -150,21 +151,21 @@ class ChangedRolesMode(object):
         pairs = arg.split(",")
         pl = list_players()
         if not pairs:
-            raise InvalidModeException("Invalid syntax for mode roles.")
+            raise InvalidModeException(u"Sintaxi invàlida.")
         for pair in pairs:
             change = pair.split(":")
             if len(change) != 2:
-                raise InvalidModeException("Invalid syntax for mode roles.")
+                raise InvalidModeException(u"Sintaxi invàlida.")
             role, num = change
             try:
                 num = int(num)
                 try:
                     lx[CHANGEABLE_ROLES[role.lower()]] = num
                 except KeyError:
-                    raise InvalidModeException(("The role \u0002{0}\u0002 "+
-                                                "is not valid.").format(role))
+                    raise InvalidModeException((u"El rol \u0002{0}\u0002 "+
+                                                u"no és vàlid.").format(role))
             except ValueError:
-                raise InvalidModeException("A bad value was used in mode roles.")
+                raise InvalidModeException(u"Valor incorrecte.")
         for k in ROLES_GUIDE.keys():
             self.ROLES_GUIDE[k] = tuple(lx)
 
