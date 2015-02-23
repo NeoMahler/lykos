@@ -4000,12 +4000,12 @@ def observe(cli, nick, chan, rest):
     role = var.get_role(nick)
     if var.PHASE != "night":
         if role == "werecrow":
-            pm(cli, nick, "You may only transform into a crow at night.")
+            pm(cli, nick, u"Només pots transformar-te en corb durant la nit.")
         else:
-            pm(cli, nick, "You may only observe at night.")
+            pm(cli, nick, u"Només pots observar de nit.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar cap poder especial.")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0])
     if not victim:
@@ -4013,21 +4013,21 @@ def observe(cli, nick, chan, rest):
 
     if victim == nick:
         if role == "werecrow":
-            pm(cli, nick, "Instead of doing that, you should probably go kill someone.")
+            pm(cli, nick, u"En comptes de fer el boig podries provar de matar algú!")
         else:
-            pm(cli, nick, "That would be a waste.")
+            pm(cli, nick, u"Això seria una pèrdua de temps...")
         return
     if nick in var.OBSERVED.keys():
         if role == "werecrow":
-            pm(cli, nick, "You are already flying to \02{0}\02's house.".format(var.OBSERVED[nick]))
+            pm(cli, nick, u"Ja estàs volant cap a la casa de \02{0}\02.".format(var.OBSERVED[nick]))
         else:
-            pm(cli, nick, "You have already observed tonight.")
+            pm(cli, nick, u"Ja has observat aquesta nit.")
         return
     if var.get_role(victim) in var.WOLFCHAT_ROLES:
         if role == "werecrow":
-            pm(cli, nick, "Flying to another wolf's house is a waste of time.")
+            pm(cli, nick, u"Volar cap a la casa d'un altre llop és una pèrdua de temps.")
         else:
-            pm(cli, nick, "Observing another wolf is a waste of time.")
+            pm(cli, nick, u"Observar un altre llop és una pèrdua de temps.")
         return
     victim = choose_target(nick, victim)
     if check_exchange(cli, nick, victim):
@@ -4036,40 +4036,40 @@ def observe(cli, nick, chan, rest):
     if nick in var.KILLS.keys():
         del var.KILLS[nick]
     if role == "werecrow":
-        pm(cli, nick, ("You transform into a large crow and start your flight "+
-                       "to \u0002{0}'s\u0002 house. You will return after "+
-                      "collecting your observations when day begins.").format(victim))
+        pm(cli, nick, (u"Et transformes en un gran corb i començes a volar cap a "+
+                       u"la casa de \u0002{0}\u0002. Tornaràs quan ja hagis "+
+                      u"observat els seus moviments, quan es faci de dia.").format(victim))
     elif role == "sorcerer":
         vrole = var.get_role(victim)
         if vrole == "amnesiac":
             vrole = var.FINAL_ROLES[victim]
         if vrole in ("seer", "oracle", "augur", "sorcerer"):
             an = "n" if vrole[0] in ("a", "e", "i", "o", "u") else ""
-            pm(cli, nick, ("After casting your ritual, you determine that \u0002{0}\u0002 " +
-                           "is a{1} \u0002{2}\u0002!").format(victim, an, vrole))
+            pm(cli, nick, (u"Després de fer el teu ritual descobreixes que \u0002{0}\u0002 " +
+                           u"és un \u0002{2}\u0002!").format(victim, vrole))
         else:
-            pm(cli, nick, ("After casting your ritual, you determine that \u0002{0}\u0002 " +
-                           "does not have paranormal senses.").format(victim))
-    debuglog("{0} ({1}) OBSERVE: {2} ({3})".format(nick, role, victim, var.get_role(victim)))
+            pm(cli, nick, (u"Després de fer el teu ritual, descobreixes que \u0002{0}\u0002 " +
+                           u"no té cap sentit paranormal.").format(victim))
+    debuglog("{0} ({1}) OBSERVA: {2} ({3})".format(nick, role, victim, var.get_role(victim)))
     chk_nightdone(cli)
 
 @cmd("id", chan=False, pm=True, game=True, playing=True, roles=("detective",))
 def investigate(cli, nick, chan, rest):
     if var.PHASE != "day":
-        pm(cli, nick, "You may only investigate people during the day.")
+        pm(cli, nick, u"Només pots investigar durant el dia.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar cap poder especial.")
         return
     if nick in var.INVESTIGATED:
-        pm(cli, nick, "You may only investigate one person per round.")
+        pm(cli, nick, u"Només pots investigar a una persona per ronda.")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0])
     if not victim:
         return
 
     if victim == nick:
-        pm(cli, nick, "Investigating yourself would be a waste.")
+        pm(cli, nick, u"No perdis el temps... :)")
         return
 
     victim = choose_target(nick, victim)
@@ -4077,27 +4077,27 @@ def investigate(cli, nick, chan, rest):
     vrole = var.get_role(victim)
     if vrole == "amnesiac":
         vrole = var.FINAL_ROLES[victim]
-    pm(cli, nick, ("The results of your investigation have returned. \u0002{0}\u0002"+
-                   " is a... \u0002{1}\u0002!").format(victim, vrole))
+    pm(cli, nick, (u"Els resultats de la teva investigació han retornat. \u0002{0}\u0002"+
+                   u" és una... \u0002{1}\u0002!").format(victim, vrole))
     debuglog("{0} ({1}) ID: {2} ({3})".format(nick, var.get_role(nick), victim, vrole))
     if random.random() < var.DETECTIVE_REVEALED_CHANCE:  # a 2/5 chance (should be changeable in settings)
         # The detective's identity is compromised!
         for badguy in var.list_players(var.WOLFCHAT_ROLES):
-            pm(cli, badguy, ("Someone accidentally drops a paper. The paper reveals "+
-                            "that \u0002{0}\u0002 is the detective!").format(nick))
+            pm(cli, badguy, (u"Algú tira per error un paper. El paper et revela "+
+                            u"que \u0002{0}\u0002 és un detectiu!").format(nick))
         debuglog("{0} ({1}) PAPER DROP".format(nick, var.get_role(nick)))
 
 @cmd("visit", chan=False, pm=True, game=True, playing=True, roles=("harlot",))
 def hvisit(cli, nick, chan, rest):
     if var.PHASE != "night":
-        pm(cli, nick, "You may only visit someone at night.")
+        pm(cli, nick, u"Només pots visitar de nit.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar cap poder especial.")
         return
     if var.HVISITED.get(nick):
-        pm(cli, nick, ("You are already spending the night "+
-                      "with \u0002{0}\u0002.").format(var.HVISITED[nick]))
+        pm(cli, nick, (u"Ja estàs passant la nit "+
+                      u"amb \u0002{0}\u0002.").format(var.HVISITED[nick]))
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0], True)
     if not victim:
@@ -4105,18 +4105,18 @@ def hvisit(cli, nick, chan, rest):
 
     if nick == victim:  # Staying home
         var.HVISITED[nick] = None
-        pm(cli, nick, "You have chosen to stay home for the night.")
+        pm(cli, nick, u"Has triat quedar-te a casa aquesta nit.")
     else:
         victim = choose_target(nick, victim)
         if check_exchange(cli, nick, victim):
             return
         var.HVISITED[nick] = victim
-        pm(cli, nick, ("You are spending the night with \u0002{0}\u0002. "+
-                      "Have a good time!").format(victim))
+        pm(cli, nick, (u"Estàs passant la nit amb \u0002{0}\u0002. "+
+                      u"Bona nit!").format(victim))
         if nick != victim: #prevent luck/misdirection totem weirdness
-            pm(cli, victim, ("You are spending the night with \u0002{0}"+
-                                     "\u0002. Have a good time!").format(nick))
-    debuglog("{0} ({1}) VISIT: {2} ({3})".format(nick, var.get_role(nick), victim, var.get_role(victim)))
+            pm(cli, victim, (u"Estàs passant la nit amb \u0002{0}"+
+                                     u"\u0002. Bona nit!").format(nick))
+    debuglog("{0} ({1}) VISITAT: {2} ({3})".format(nick, var.get_role(nick), victim, var.get_role(victim)))
     chk_nightdone(cli)
 
 def is_fake_nick(who):
@@ -4126,20 +4126,20 @@ def is_fake_nick(who):
 def see(cli, nick, chan, rest):
     role = var.get_role(nick)
     if var.PHASE != "night":
-        pm(cli, nick, "You may only have visions at night.")
+        pm(cli, nick, u"Les vibracions mentals només t'arriben de nit!")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar poders especials.")
         return
     if nick in var.SEEN:
-        pm(cli, nick, "You may only have one vision per round.")
+        pm(cli, nick, u"Només pots tenir una visió.")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0])
     if not victim:
         return
 
     if victim == nick:
-        pm(cli, nick, "Seeing yourself would be a waste.")
+        pm(cli, nick, u"Segur que et vols veure a tu mateix?")
         return
     victim = choose_target(nick, victim)
     if check_exchange(cli, nick, victim):
@@ -4153,30 +4153,30 @@ def see(cli, nick, chan, rest):
             victimrole = var.DEFAULT_ROLE
             if var.DEFAULT_SEEN_AS_VILL:
                 victimrole = "villager"
-        pm(cli, nick, ("You have a vision; in this vision, "+
-                        "you see that \u0002{0}\u0002 is a "+
-                        "\u0002{1}\u0002!").format(victim, victimrole))
-        debuglog("{0} ({1}) SEE: {2} ({3}) as {4}".format(nick, role, victim, vrole, victimrole))
+        pm(cli, nick, (u"Tens una visió; en aquesta visió, "+
+                        u"veus que \u0002{0}\u0002 és un "+
+                        u"\u0002{1}\u0002!").format(victim, victimrole))
+        debuglog("{0} ({1}) VIST: {2} ({3}) com a {4}".format(nick, role, victim, vrole, victimrole))
     elif role == "oracle":
         iswolf = False
         if victimrole in var.SEEN_WOLF or victim in var.ROLES["cursed villager"]:
             iswolf = True
-        pm(cli, nick, ("Your paranormal senses are tingling! "+
-                        "The spirits tell you that \u0002{0}\u0002 is {1}"+
-                        "a {2}wolf{2}!").format(victim, "" if iswolf else "\u0002not\u0002 ", BOLD if iswolf else ""))
-        debuglog("{0} ({1}) SEE: {2} ({3}) (Wolf: {4})".format(nick, role, victim, vrole, str(iswolf)))
+        pm(cli, nick, (u"Els teus sentits paranormals han tingut una visió! "+
+                        u"Els esperits et diuen que \u0002{0}\u0002 {1}és"+
+                        u" un {2}wolf{2}!").format(victim, "" if iswolf else "\u0002no\u0002 ", BOLD if iswolf else ""))
+        debuglog("{0} ({1}) VIST: {2} ({3}) (Llop: {4})".format(nick, role, victim, vrole, str(iswolf)))
     elif role == "augur":
         if victimrole == "amnesiac":
             victimrole = var.FINAL_ROLES[victim]
-        aura = "blue"
+        aura = "blau"
         if victimrole in var.WOLFTEAM_ROLES:
-            aura = "red"
+            aura = "vermell"
         elif victimrole in var.TRUE_NEUTRAL_ROLES:
-            aura = "grey"
-        pm(cli, nick, ("You have a vision; in this vision, " +
-                       "you see that \u0002{0}\u0002 exudes " +
-                       "a \u0002{1}\u0002 aura!").format(victim, aura))
-        debuglog("{0} ({1}) SEE: {2} ({3}) as {4} ({5} aura)".format(nick, role, victim, vrole, victimrole, aura))
+            aura = "gris"
+        pm(cli, nick, (u"Tens una visió; en aquesta visió, " +
+                       u"veus que \u0002{0}\u0002 té una " +
+                       u"aurèola de color \u0002{1}\u0002!").format(victim, aura))
+        debuglog("{0} ({1}) VIST: {2} ({3}) com a {4} ({5} aura)".format(nick, role, victim, vrole, victimrole, aura))
     var.SEEN.append(nick)
     chk_nightdone(cli)
 
@@ -4191,28 +4191,28 @@ def give(cli, nick, chan, rest):
 @cmd("totem", chan=False, pm=True, game=True, playing=True, roles=var.TOTEM_ORDER)
 def totem(cli, nick, chan, rest):
     if var.PHASE != "night":
-        pm(cli, nick, "You may only give totems at night.")
+        pm(cli, nick, u"Només pots donar tòtems durant la nit.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar cap poder especial.")
         return
     if nick in var.SHAMANS:
-        pm(cli, nick, "You have already given out your totem this round.")
+        pm(cli, nick, u"Ja has donat un tòtem aquesta nit.")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0], True)
     if not victim:
         return
     if nick in var.LASTGIVEN and var.LASTGIVEN[nick] == victim:
-        pm(cli, nick, "You gave your totem to \u0002{0}\u0002 last time, you must choose someone else.".format(victim))
+        pm(cli, nick, u"Ja vas donar el teu tòtem a \u0002{0}\u0002 l'última nit,has de triar algú altre.".format(victim))
         return
     type = ""
     role = var.get_role(nick)
     if role != "crazed shaman":
-        type = " of " + var.TOTEMS[nick]
+        type = " de " + var.TOTEMS[nick]
     victim = choose_target(nick, victim)
     if check_exchange(cli, nick, victim):
         return
-    pm(cli, nick, ("You have given a totem{0} to \u0002{1}\u0002.").format(type, victim))
+    pm(cli, nick, (u"Has donat un tòtem{0} a \u0002{1}\u0002.").format(type, victim))
     totem = var.TOTEMS[nick]
     if totem == "death":
         if victim not in var.DYING:
@@ -4258,7 +4258,7 @@ def totem(cli, nick, chan, rest):
         if victim not in var.TOBEMISDIRECTED:
             var.TOBEMISDIRECTED.append(victim)
     else:
-        pm(cli, nick, "I don't know what to do with a '{0}' totem. This is a bug, please report it to the admins.".format(totem))
+        pm(cli, nick, u"No sé què fer amb el tòtem '{0}'! Això és un error. Si us plau, reporta-ho a un administrador.".format(totem))
     var.LASTGIVEN[nick] = victim
     var.SHAMANS.append(nick)
     debuglog("{0} ({1}) TOTEM: {2} ({3})".format(nick, role, victim, totem))
@@ -4267,13 +4267,13 @@ def totem(cli, nick, chan, rest):
 @cmd("immunize", "immunise", chan=False, pm=True, game=True, playing=True, roles=("doctor",))
 def immunize(cli, nick, chan, rest):
     if var.PHASE != "day":
-        pm(cli, nick, "You may only immunize people during the day.")
+        pm(cli, nick, u"Només pots vacunar durant el dia.")
         return
     if nick in var.SILENCED:
-        pm(cli, nick, "You have been silenced, and are unable to use any special powers.")
+        pm(cli, nick, u"Has estat silenciat i no pots utilitzar poder especials.")
         return
     if nick in var.DOCTORS and var.DOCTORS[nick] == 0:
-        pm(cli, nick, "You have run out of immunizations.")
+        pm(cli, nick, u"T'has quedat sense vacunes")
         return
     victim = get_victim(cli, nick, re.split(" +",rest)[0], True)
     if not victim:
@@ -4281,12 +4281,12 @@ def immunize(cli, nick, chan, rest):
     victim = choose_target(nick, victim)
     if check_exchange(cli, nick, victim):
         return
-    pm(cli, nick, "You have given an immunization to \u0002{0}\u0002.".format(victim))
+    pm(cli, nick, u"Has donat una vacuna a \u0002{0}\u0002.".format(victim))
     lycan = False
     if var.get_role(victim) == "lycan":
         lycan = True
-        lycan_message = ("You feel as if a curse has been lifted from you... It seems that your lycanthropy is cured " +
-                         "and you will no longer become a werewolf if targeted by the wolves!")
+        lycan_message = (u"Ets sents com si la maledició t'hagués desaparegut... Sembla que la teva licantropia està curada " +
+                         u"i ja no et convertiràs mai més en llop si els llops no et tornen a mossegar!")
         var.ROLES["lycan"].remove(victim)
         var.ROLES["villager"].append(victim)
         var.FINAL_ROLES[victim] = "villager"
@@ -4299,25 +4299,25 @@ def immunize(cli, nick, chan, rest):
         # naturally, we would want to mimic that behavior here, and what better way of indicating that things got worse than
         # by making the turning happen a night earlier? :)
         var.BITTEN[victim] -= 1
-        lycan_message = ("You have a brief flashback to your dream last night. " +
-                         "The event quickly subsides, but a lingering thought remains in your mind...")
+        lycan_message = (u"De sobte recordes el somni que has tingut l'última nit. " +
+                         u"No li dones importància i l'oblides, però un petit record de la nit resta a la teva ment...")
     else:
-        lycan_message = "You don't feel any different..."
+        lycan_message = u"No et sents gaire diferent..."
         var.IMMUNIZED.add(victim)
-    pm(cli, victim, ("You feel a sharp prick in the back of your arm and temporarily black out. " +
-                     "When you come to, you notice an empty syringe lying on the ground. {0}").format(lycan_message))
+    pm(cli, victim, (u"Sents una forta punxada al teu braç però de seguida et passa. " +
+                     u"Quan mires què ha passat veus una xeringa buida al terra. {0}").format(lycan_message))
     var.DOCTORS[nick] -= 1
-    debuglog("{0} ({1}) IMMUNIZE: {2} ({3})".format(nick, var.get_role(nick), victim, "lycan" if lycan else var.get_role(victim)))
+    debuglog("{0} ({1}) IMMUNITZAT: {2} ({3})".format(nick, var.get_role(nick), victim, "lycan" if lycan else var.get_role(victim)))
 
 def get_bitten_message(nick):
     time_left = var.BITTEN[nick]
     message = ''
     if time_left <= 1:
-        message = ("You had the same dream again, but this time YOU were the pursuer. You smell fear from your quarry " +
-                   "as you give an exhilerating chase, going only half your speed in order to draw out the fun. " +
-                   "Suddenly your prey trips over a rock and falls down, allowing you to close in the remaining distance. " +
-                   "You savor the fear in their eyes briefly before you raise your claw to deal a killing blow. " +
-                   "Right before it connects, you wake up.")
+        message = (u"Has tingut el mateix somni una altra vegada, però ara TU eres el l'agressor. Sents la por de la teva presa " +
+                   u"mentre la persegueixes, corrent només a la meitat de la teva velocitat màxima per passar-t'ho més bé. " +
+                   u"Se sobte, la teva presa cau a terra, i això et permet atrapar-la. " +
+                   u"Assaboreixes la por que surt dels seus ulls just abans de clavar-li les teves dents per matar-la. " +
+                   u"Et despertes.")
     elif time_left == 2:
         message = (u"Has somiat que corries per fora de la vila. " +
                    u"De cop senties una soroll i veus un èsser monstruós que " +
