@@ -207,33 +207,31 @@ TEMPLATE_RESTRICTIONS = {"cursed villager" : WOLF_ROLES + ["seer", "oracle", "au
 # Roles listed here cannot be used in !fgame roles=blah. If they are defined in ROLE_GUIDE they may still be used.
 DISABLED_ROLES = []
 
-NO_VICTIMS_MESSAGES = ("The body of a young penguin pet is found.",
-                       "A pool of blood and wolf paw prints are found.",
-                       "Traces of wolf fur are found.")
-LYNCH_MESSAGES = ("The villagers, after much debate, finally decide on lynching \u0002{0}\u0002, who turned out to be... a{1} \u0002{2}\u0002.",
-                  "Under a lot of noise, the pitchfork-bearing villagers lynch \u0002{0}\u0002, who turned out to be... a{1} \u0002{2}\u0002.",
-                  "Despite protests, the mob drags their victim to the hanging tree. \u0002{0}\u0002 succumbs to the will of the horde, and is hanged. The villagers have killed a{1} \u0002{2}\u0002.",
-                  "Resigned to the inevitable, \u0002{0}\u0002 is led to the gallows. Once the twitching stops, it is discovered that the village lynched a{1} \u0002{2}\u0002.",
-                  "Before the rope is pulled, \u0002{0}\u0002, a{1} \u0002{2}\u0002, throws a grenade at the mob. The grenade explodes early.")
-LYNCH_MESSAGES_NO_REVEAL = ("The villagers, after much debate, finally decide on lynching \u0002{0}\u0002.",
-                            "Under a lot of noise, the pitchfork-bearing villagers lynch \u0002{0}\u0002.",
-                            "Despite protests, the mob drags their victim to the hanging tree. \u0002{0}\u0002 succumbs to the will of the horde, and is hanged.",
-                            "Resigned to the inevitable, \u0002{0}\u0002 is led to the gallows.",
-                            "Before the rope is pulled, \u0002{0}\u0002 throws a grenade at the mob. The grenade explodes early.")
-QUIT_MESSAGES= ("\u0002{0}\u0002, a{1} \u0002{2}\u0002, suddenly falls over dead before the astonished villagers.",
-                "A pack of wild animals sets upon \u0002{0}\u0002. Soon the \u0002{2}\u0002 is only a pile of bones and a lump in the beasts' stomachs.",
-                "\u0002{0}\u0002, a{1} \u0002{2}\u0002, fell off the roof of their house and is now dead.",
-                "\u0002{0}\u0002 is crushed to death by a falling tree. The villagers desperately try to save the \u0002{2}\u0002, but it is too late.",
-                "\u0002{0}\u0002 suddenly bursts into flames and is now all but a memory. The survivors bury the \u0002{2}\u0002's ashes.")
-QUIT_MESSAGES_NO_REVEAL = ("\u0002{0}\u0002 suddenly falls over dead before the astonished villagers.",
-                           "A pack of wild animals sets upon \u0002{0}\u0002. Soon they are only a pile of bones and a lump in the beasts' stomachs.",
-                           "\u0002{0}\u0002 fell off the roof of their house and is now dead.",
-                           "\u0002{0}\u0002 is crushed to death by a falling tree. The villagers desperately try to save them, but it is too late.",
-                           "\u0002{0}\u0002 suddenly bursts into flames and is now all but a memory.")
+NO_VICTIMS_MESSAGES = (u"El cos d'un petit pingüí és trobat.",
+                       u"Es troben gotes de sang i petjades de llop.",
+                       u"S'han trobat rastres de llops.")
+LYNCH_MESSAGES = (u"Els habitants, després de moltes discussions, decideixen linxar a \u0002{0}\u0002. Quan es mor veuen que era... un \u0002{1}\u0002.",
+                  u"Amb molt soroll, els habitants, enfadats després de les morts dels seus amics, decideixen linxar a \u0002{0}\u0002 i descobreixen que han linxat a un... \u0002{1}\u0002.",
+                  u"El condemnat, \u0002{0}\u0002, és arrossegat cap a la forca. Amb la cara deformada per l'horror, crida i intenta defensar-se. Es descobreix que era un \u0002{1}\u0002.",
+                  u"Resignat al seu destí, \u0002{0}\u0002 és portat a la guillotina. Després de la seva mort, es descobreix que era un \u0002{1}\u0002.")
+LYNCH_MESSAGES_NO_REVEAL = (u"Els habitants, després de moltes discussions, decideixen linxar a \u0002{0}\u0002.",
+                            u"Amb molt soroll, els habitants, enfadats després de les morts dels seus amics, decideixen linxar a \u0002{0}\u0002.",
+                            u"El condemnat, \u0002{0}\u0002, és arrossegat cap a la forca. Amb la cara deformada per l'horror, crida i intenta defensar-se.",
+                            u"Resignat al seu destí, \u0002{0}\u0002 és portat a la guillotina.")
+QUIT_MESSAGES= (u"De sobte, \u0002{0}\u0002, un{1} \u0002{2}\u0002, cau mort davant dels vilatans sorpresos",
+                u"Una manada d'animals salvatges ataquen a \u0002{0}\u0002. Poca estona després, el \u0002{2}\u0002 és només una pila d'ossos barrejada amb trossos d'estòmac.",
+                u"\u0002{0}\u0002, un{1} \u0002{2}\u0002, cau de la teulada de casa seva i mor.",
+                u"Un arbre cau sobre \u0002{0}\u0002. Els vilatans intenten salvar desesperadament el \u0002{2}\u0002, però és massa tard.",
+                u"De cop, unes flames apareixen al voltant de \u0002{0}\u0002 que cau a terra, socarrimat. Els supervivents enterren el cos d'un \u0002{2}\u0002.")
+QUIT_MESSAGES_NO_REVEAL = (u"De sobte, \u0002{0}\u0002, cau mort davant dels vilatans sorpresos",
+                           u"Una manada d'animals salvatges ataquen a \u0002{0}\u0002.",
+                           u"\u0002{0}\u0002 cau de la teulada de casa seva i mor.",
+                           u"Un arbre cau sobre \u0002{0}\u0002.",
+                           u"De cop, unes flames apareixen al voltant de \u0002{0}\u0002 que cau a terra, socarrimat.")
 
 import botconfig, fnmatch
 
-RULES = (botconfig.CHANNEL + " channel rules: http://wolf.xnrand.com/rules")
+RULES = ("Normes del joc (en anglès): https://github.com/lykoss/lykos/wiki")
 DENY = {}
 ALLOW = {}
 
@@ -407,7 +405,7 @@ class ChangedRolesMode(object):
             role, num = change
             try:
                 if role.lower() in DISABLED_ROLES:
-                    raise InvalidModeException("The role \u0002{0}\u0002 has been disabled.".format(role))
+                    raise InvalidModeException("El rol \u0002{0}\u0002 ha estat desactivat.".format(role))
                 elif role.lower() in self.ROLE_GUIDE:
                     self.ROLE_GUIDE[role.lower()] = tuple([int(num)] * len(ROLE_INDEX))
                 elif role.lower() == "default" and num.lower() in self.ROLE_GUIDE:
@@ -1067,21 +1065,21 @@ def get_player_totals(acc):
             role_totals += ["\u0002{0}\u0002: {1}".format(role, count) for role, count in role_tmp.items() if role not in order]
             c.execute("SELECT SUM(totalgames) from rolestats WHERE player=? COLLATE NOCASE AND role!='cursed villager' AND role!='gunner'", (acc,))
             row = c.fetchone()
-            return "\u0002{0}\u0002's totals | \u0002{1}\u0002 games | {2}".format(player[0], row[0], break_long_message(role_totals, ", "))
+            return u"Estadístiques de \u0002{0}\u0002 | \u0002{1}\u0002 jocs | {2}".format(player[0], row[0], break_long_message(role_totals, ", "))
         else:
-            return "\u0002{0}\u0002 has not played any games.".format(acc)
+            return "\u0002{0}\u0002 no ha jugat mai.".format(acc)
 
 def get_game_stats(gamemode, size):
     with conn:
         for row in c.execute("SELECT * FROM gamestats WHERE gamemode=? AND size=?", (gamemode, size)):
-            msg = "\u0002%d\u0002 player games | Village wins: %d (%d%%), Wolf wins: %d (%d%%)" % (row[1], row[2], round(row[2]/row[6] * 100), row[3], round(row[3]/row[6] * 100))
+            msg = u"\u0002%d\u0002 jocs | Victòries dels vilatans: %d (%d%%), Victòries dels llops: %d (%d%%)" % (row[1], row[2], round(row[2]/row[6] * 100), row[3], round(row[3]/row[6] * 100))
             if row[4] > 0:
-                msg += ", Monster wins: %d (%d%%)" % (row[4], round(row[4]/row[6] * 100))
+                msg += u", Victòries dels monstres: %d (%d%%)" % (row[4], round(row[4]/row[6] * 100))
             if row[5] > 0:
-                msg += ", Fool wins: %d (%d%%)" % (row[5], round(row[5]/row[6] * 100))
-            return msg + ", Total games: {0}".format(row[6])
+                msg += u", Victòries del boig: %d (%d%%)" % (row[5], round(row[5]/row[6] * 100))
+            return msg + u", Partides totals: {0}".format(row[6])
         else:
-            return "No stats for \u0002{0}\u0002 player games.".format(size)
+            return "No hi han estadístiques per \u0002{0}\u0002".format(size)
 
 def get_game_totals(gamemode):
     size_totals = []
@@ -1095,8 +1093,8 @@ def get_game_totals(gamemode):
                 total += row[1]
 
     if len(size_totals) == 0:
-        return "No games have been played in the {0} game mode.".format(gamemode)
+        return "No s'ha jugat cap joc en el mode {0}.".format(gamemode)
     else:
-        return "Total games ({0}) | {1}".format(total, ", ".join(size_totals))
+        return "Jocs totals ({0}) | {1}".format(total, ", ".join(size_totals))
 
 # vim: set expandtab:sw=4:ts=4:
